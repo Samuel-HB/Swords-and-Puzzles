@@ -4,17 +4,14 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public InputActionReference moveAction;
-
-    private Vector2 direction = Vector2.zero;
+    private Vector2 currentInputValue;
+    private Vector3 movementDirection;
     private float speed = 5f;
 
-    private Vector2 currentInputValue;
-    //private Vector2 movementDirection;
-    private Vector3 movementDirection;
+    private Vector2 boxLength = new Vector2(0.95f, 0.95f);
     private Vector3 lastPosition = Vector3.zero;
-
-    private Vector2 boxLength = new Vector2(1, 1);
     private int wallLayerMask = 0;
+    private int wallOnlyForPlayerLayerMask = 0;
 
 
     private void OnEnable()
@@ -26,18 +23,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnMoveActionPerformed(InputAction.CallbackContext context)
     {
-        direction = context.ReadValue<Vector2>();
-
-        //new
         currentInputValue = context.ReadValue<Vector2>().normalized;
         movementDirection = GetDirection(currentInputValue);
     }
 
     private void OnMoveActionCanceled(InputAction.CallbackContext context)
     {
-        //direction = Vector2.zero;
-
-        //new
         movementDirection = Vector2.zero;
     }
 
@@ -49,41 +40,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        wallLayerMask = 1 << LayerMask.NameToLayer("Wall");
+        wallLayerMask = 1 << LayerMask.NameToLayer("Default");
+        wallOnlyForPlayerLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
     }
 
     private void Update()
     {
-        //transform.Translate(direction.normalized * speed * Time.deltaTime);
-
-        //new
-        //transform.Translate(movementDirection * speed * Time.deltaTime);
-
         transform.position += movementDirection * speed * Time.deltaTime;
+        //transform.position = new Vector3(((int)transform.position.x)/4, ((int)transform.position.y)/4);
 
-        Collider2D wallCollider = Physics2D.OverlapBox(transform.position, boxLength, 0f, wallLayerMask);
+                                                                                  // check all layers wall tiles can have in project
+        Collider2D wallCollider = Physics2D.OverlapBox(transform.position, boxLength, 0f, wallLayerMask | wallOnlyForPlayerLayerMask);
         if (wallCollider != null)
         {
-            Vector3 difference = transform.position - lastPosition;
-            //transform.position -= difference * speed * Time.deltaTime;
-            transform.position -= difference;
+            if (wallCollider.TryGetComponent<WallTile>(out WallTile wallTile))
+            {
+                Vector3 difference = transform.position - lastPosition;
+                //difference = new Vector3((int)difference.x, (int)difference.y);
+                //transform.position -= difference * speed * Time.deltaTime;
+                transform.position -= difference;
+            }
         }
         lastPosition = transform.position;
-
-        //Transform finalPosition;
-
-        //Vector3 endPos = Vector3.zero;
-
-        //if (!isMoving)
-        //    endPos = transform.position + new Vector3(5, 0, 0); 
-
-        //if (isMoving)
-        //{
-        //    //Vector3 directionToGo = transform.position + movementDirection;
-        //    transform.position = Vector3.Lerp(transform.position, endPos, Time.deltaTime);
-        //}
-
-        //rb.linearVelocity = movementDirection * 1000 * Time.deltaTime;
+        //lastPosition = new Vector3((int)transform.position.x, (int)transform.position.y);
     }
 
     private Vector2 GetDirection(Vector2 inputValue)
@@ -105,7 +84,6 @@ public class PlayerMovement : MonoBehaviour
         //else {
         //    finalDirection = Vector2.zero;
         //}
-
         return finalDirection;
     }
 

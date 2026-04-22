@@ -7,5 +7,13 @@ public class Player : MonoBehaviour, IDamageable
     public void TakeDamage()
     {
         health -= 1;
+        if (health <= 0) {
+            PlayerLose();
+        }
+    }
+
+    private void PlayerLose()
+    {
+        print("player lose");
     }
 }
