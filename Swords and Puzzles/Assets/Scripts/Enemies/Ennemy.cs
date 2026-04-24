@@ -4,21 +4,22 @@ public class Ennemy : MonoBehaviour, IDamageable
 {
     private int health = 0;
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
-        health -= 1;
+        health -= damage;
     }
 
-    private void OnTriggerEnter2D(Collider2D coll)
-    {
-        if (TryGetComponent<IDamageable>(out IDamageable iDamageable))
-        {
-            iDamageable.TakeDamage();
-        }
+    //private void OnTriggerEnter2D(Collider2D coll)
+    //{
+    //    if (TryGetComponent<IDamageable>(out IDamageable iDamageable))
+    //    {
+    //        iDamageable.TakeDamage();
+    //    }
 
-        //IDamageable gus = GetComponent<IDamageable>();
-        //if (gus != null) {
-        //    gus.TakeDamage();
-        //}
-    }
+    //    //IDamageable gus = GetComponent<IDamageable>();
+    //    //if (gus != null) {
+    //    //    gus.TakeDamage();
+    //    //}
+
+    //}
 }

@@ -4,9 +4,9 @@ public class Player : MonoBehaviour, IDamageable
 {
     public int health = 0;
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
-        health -= 1;
+        health -= damage;
         if (health <= 0) {
             PlayerLose();
         }

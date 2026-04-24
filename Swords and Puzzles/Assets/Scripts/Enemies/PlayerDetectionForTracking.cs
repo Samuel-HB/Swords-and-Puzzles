@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerDetection : MonoBehaviour
+public class PlayerDetectionForTracking : MonoBehaviour
 {
-    [SerializeField] private ShootOnPlayer shootOnPlayer;
+    [SerializeField] private PathFinder pathFinder;
 
     [SerializeField] private float radius = 10f;
     private int playerLayerMask = 0;
 
     [SerializeField] private float durationBeforeFirstDetection = 0.2f; 
-    private float secondsToWait = 0.2f;
+    private float secondsToWait = 0.4f;
     private IEnumerator timer;
 
 
@@ -24,23 +24,36 @@ public class PlayerDetection : MonoBehaviour
         playerLayerMask = 1 << LayerMask.NameToLayer("Player");
 
         CallStartTimer();
+        //StartCoroutine(WaitToFindPathToPlayer());
     }
+
+
+
+
+
+    // to test
+    //IEnumerator WaitToFindPathToPlayer() // trying to optimize by doing the maths only 2 times a second
+    //{
+    //    yield return new WaitForSeconds(1f);
+    //    pathFinder.StartFindPath();
+    //}
+
+
+
+
+
+
+
+
 
     private void TryToDetectPlayer()
     {
-        //if (Physics2D.CircleCast(transform.position, radius, Vector2.zero, 0f, playerLayerMask))
-        //{
-        //    print("CircleCast detect player");
-        //}
-
         Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, playerLayerMask);
         if (hitCollider != null)
         {
-            shootOnPlayer.target = hitCollider.transform;
-
-            if (TryToDetectPlayerByRaycast(hitCollider.transform.position))
-            {
-                shootOnPlayer.Shoot();
+            if (TryToDetectPlayerByRaycast(hitCollider.transform.position)) {
+                print("gus !!!");
+                pathFinder.StartFindPath();
             }
         }
     }
@@ -87,11 +100,11 @@ public class PlayerDetection : MonoBehaviour
         CallTimer();
     }
 
-    public void StopTimer()
-    {
-        if (timer != null) {
-            StopCoroutine(timer);
-            timer = null;
-        }
-    }
+    //public void StopTimer()
+    //{
+    //    if (timer != null) {
+    //        StopCoroutine(timer);
+    //        timer = null;
+    //    }
+    //}
 }

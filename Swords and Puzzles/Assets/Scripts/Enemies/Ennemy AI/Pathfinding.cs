@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine.Tilemaps;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -12,8 +12,8 @@ public class Pathfinding : MonoBehaviour
 
     [SerializeField] private int gridHeight = 10; // put in awake tilemap bounds instead
     [SerializeField] private int gridWidth = 10;
-    [SerializeField] private float cellHeight = 1f; // change to int if float not necessary
-    [SerializeField] private float cellWidth = 1f; // change to int if float not necessary
+    [SerializeField] private float cellHeight = 1f;
+    [SerializeField] private float cellWidth = 1f;
 
     [SerializeField] private bool canGeneratePath = false;
     private bool isPathGenerated = false;
@@ -22,18 +22,15 @@ public class Pathfinding : MonoBehaviour
 
     //new
     [SerializeField] private Tilemap tilemap;
-    private List<Vector2> obstaclePositionsOnTilemap = new List<Vector2>();
+    private List<Vector2Int> obstaclePositionsOnTilemap = new List<Vector2Int>();
     private Vector2 startCell = new Vector2(0, 1);
     private Vector2 endCell = new Vector2(8, 7);
 
-    private int tilemapBoundX = 27;
-    private int tilemapBoundY = 48;
+    private int tilemapBoundX = 48;
+    private int tilemapBoundY = 27;
 
     [SerializeField] private GameObject wallPrefab;
-
-
-    //to undrestand where are the grids
-    Vector3Int gusPos = new Vector3Int();
+    private bool areObstaclesInstantiated = false;
 
 
     private void OnDrawGizmos()
@@ -58,7 +55,6 @@ public class Pathfinding : MonoBehaviour
             Gizmos.DrawCube(keyValuePair.Key + (Vector2)transform.position, new Vector3(cellWidth, cellHeight));
 
 
-
             //to undrestand where are the grids
             Gizmos.color = new Color(1f, 0.25f, 0.25f, 0.6f);
             Gizmos.DrawWireSphere(transform.position, 2f);
@@ -66,13 +62,12 @@ public class Pathfinding : MonoBehaviour
             {
                 Gizmos.DrawWireSphere(transform.position, 2f);
             }
-
         }
     }
 
     private void Awake()
     {
-        GetObstaclePositionsOnTilemap();
+        GenerateGrid();
     }
 
     private void GetObstaclePositionsOnTilemap()
@@ -81,14 +76,10 @@ public class Pathfinding : MonoBehaviour
         //print("tilemap.cellBounds.xMax" + tilemap.cellBounds.xMax);
         //print("tilemap.cellBounds.yMin" + tilemap.cellBounds.yMin);
         //print("tilemap.cellBounds.yMax" + tilemap.cellBounds.yMax);
-
-
-
         print("size X" + tilemap.size.x);
         print("size Y" + tilemap.size.y);
         print("tilemap.cellBounds.size.x" + tilemap.cellBounds.size.x);
         print("tilemap.cellBounds.size.y" + tilemap.localBounds.size.y);
-
 
         //for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++) {
         //    for (int y = tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
@@ -98,20 +89,19 @@ public class Pathfinding : MonoBehaviour
 
         //for (int x = 0; x < tilemap.cellBounds.size.x; x++) {
         //    for (int y = 0; y < tilemap.cellBounds.size.y; y++)
-        
 
         // manually indicate what are the bounds because prefab tile does'nt seems to be detected by cellBounds.size
-        for (int x = 0; x < tilemapBoundX - 1; x++) {
-            for (int y = 0; y < tilemapBoundY - 1; y++)
+        //for (int x = 0; x < gridWidth - 1; x++) {
+        //    for (int y = 0; y < gridHeight - 1; y++)
+        for (int x = 0; x < tilemapBoundX; x++) {
+            for (int y = 0; y < tilemapBoundY; y++)
             {
-                //Vector3Int localPos = new Vector3Int(x, y, (int)tilemap.transform.localPosition.y);
                 Vector3Int localPos = new Vector3Int(x, y, (int)tilemap.transform.position.y);
-                gusPos = localPos;
-                //Vector3 worldPos = tilemap.CellToWorld(localPos);
-                print("has not tile");
 
-
-
+                print("tilemapBoundX: " + tilemapBoundX);
+                print("tilemapBoundY: " + tilemapBoundY);
+                print("gridWidth: " + gridWidth);
+                print("gridHeight: " + gridHeight);
 
 
                 // if prefab tile isn't visible by tilemap use classic tiles to position obstacles
@@ -124,40 +114,28 @@ public class Pathfinding : MonoBehaviour
                 // based on the classic tilemap
 
 
-
-                //just to test how much it covers the screen
-                //obstaclePositionsOnTilemap.Add((Vector2Int)localPos);
-
-
-
-
                 if (tilemap.HasTile(localPos))
-                //TileBase tile = tilemap.GetTile(localPos);
-                //if (tilemap.ContainsTile(TileBase gus))
-                //if (tile != null)
                 {
-                    print("has tile");
-                    //obstaclePositionsOnTilemap.Add(worldPos);
-
-                    //because of testing, comment this line
                     obstaclePositionsOnTilemap.Add((Vector2Int)localPos);
 
-                    //new
-                    Instantiate(wallPrefab, localPos, Quaternion.identity);
+                    // only instantiate wall prefabs once when first time load level
+                    // load every obstacles at the start and deactivate them until reach their levels ?
+                    if (!areObstaclesInstantiated) {
+                        Instantiate(wallPrefab, localPos, Quaternion.identity);
+                    }
                 }
             }
         }
-    }
-
-    private void Start()
-    {        
+        areObstaclesInstantiated = true;
     }
 
     private void Update()
     {
         if (canGeneratePath && !isPathGenerated)
         {
-            GenerateGrid();
+            //GenerateGrid(); 
+                            // if everything correct don't need to call it anymore than when load the level,
+                            // just RemoveObstacleTile() is enough to update the tilemap and the pathfinding grid
             FindPath(startCell, endCell); // to test
             isPathGenerated = true;
         }
@@ -178,30 +156,25 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
-        // change this to have obstacles based on coordinates of obstacles on tilemap
-        // (coordinated registered on other dictionary)
         //for (int i = 0; i < 40; i++)
         //{
         //    Vector2 pos = new Vector2(Random.Range(0, gridWidth), Random.Range(0, gridHeight));
         //    cells[pos].isObstacle = true;
         //}
 
-
-
-        //print("x: " + obstaclePositionsOnTilemap[0].x + "y: " + obstaclePositionsOnTilemap[0].y);
-                                                                        // for now nothing is added to the list
-
         GetObstaclePositionsOnTilemap();
-
         for (int i = 0; i < obstaclePositionsOnTilemap.Count; i++)
-        //for (int i = 0; i < obstaclePositionsOnTilemap.Count - 1; i++) // -1 because perhaps of the 0.5f offset
         {
-            //Vector2Int pos = new Vector2Int((int)obstaclePositionsOnTilemap[i].x, (int)obstaclePositionsOnTilemap[i].y);
-            Vector2 pos = new Vector2(obstaclePositionsOnTilemap[i].x, obstaclePositionsOnTilemap[i].y);
-            print("x: " + obstaclePositionsOnTilemap[i].x + "y: " + obstaclePositionsOnTilemap[i].y);
+            Vector2Int pos = new Vector2Int(obstaclePositionsOnTilemap[i].x, obstaclePositionsOnTilemap[i].y);
             cells[pos].isObstacle = true;
         }
         obstaclePositionsOnTilemap.Clear();
+    }
+
+    private void RemoveObstacleTile(Vector2Int obstacleRemovedPos)
+    {
+        tilemap.SetTile((Vector3Int)obstacleRemovedPos, null);
+        cells[obstacleRemovedPos].isObstacle = false;
     }
 
     private void FindPath(Vector2 startPos, Vector2 endPos)
@@ -254,26 +227,45 @@ public class Pathfinding : MonoBehaviour
 
     private void SearchCellNeighbors(Vector2 cellPos, Vector2 endPos)
     {
-        for (float x = cellPos.x - cellWidth; x <= cellWidth + cellPos.x; x += cellWidth) {
-            for (float y = cellPos.y - cellHeight; y <= cellHeight + cellPos.y; y += cellHeight)
+        //for (float x = cellPos.x - cellWidth; x <= cellWidth + cellPos.x; x += cellWidth)
+        //    for (float y = cellPos.y - cellHeight; y <= cellHeight + cellPos.y; y += cellHeight)
+        float x = 0;
+        float y = 0;
+
+        for (int checkNeighborCount = 0; checkNeighborCount < 4; checkNeighborCount++)
+        {
+            if (checkNeighborCount == 0) {
+                x = cellPos.x;
+                y = cellPos.y + cellHeight;
+            }
+            if (checkNeighborCount == 1) {
+                x = cellPos.x - cellWidth;
+                y = cellPos.y;
+            }
+            if (checkNeighborCount == 2) {
+                x = cellPos.x + cellWidth;
+                y = cellPos.y;
+            }
+            if (checkNeighborCount == 3) {
+                x = cellPos.x;
+                y = cellPos.y - cellHeight;
+            }
+            Vector2 neighborPos = new Vector2(x, y);
+            if (cells.TryGetValue(neighborPos, out Cell c) && !cellsAlreadySearched.Contains(neighborPos) && !cells[neighborPos].isObstacle)
             {
-                Vector2 neighborPos = new Vector2(x, y);
-                if (cells.TryGetValue(neighborPos, out Cell c) && !cellsAlreadySearched.Contains(neighborPos) && !cells[neighborPos].isObstacle)
+                int gCostToNeighbor = cells[cellPos].gCost + GetDistance(cellPos, neighborPos);
+
+                if (gCostToNeighbor < cells[neighborPos].gCost)
                 {
-                    int gCostToNeighbor = cells[cellPos].gCost + GetDistance(cellPos, neighborPos);
+                    Cell neighborNode = cells[neighborPos];
 
-                    if (gCostToNeighbor < cells[neighborPos].gCost)
-                    {
-                        Cell neighborNode = cells[neighborPos];
+                    neighborNode.connection = cellPos;
+                    neighborNode.gCost = gCostToNeighbor;
+                    neighborNode.hCost = GetDistance(neighborPos, endPos);
+                    neighborNode.fCost = neighborNode.gCost + neighborNode.hCost;
 
-                        neighborNode.connection = cellPos;
-                        neighborNode.gCost = gCostToNeighbor;
-                        neighborNode.hCost = GetDistance(neighborPos, endPos);
-                        neighborNode.fCost = neighborNode.gCost + neighborNode.hCost;
-
-                        if (!cellsToSearch.Contains(neighborPos)) {
-                            cellsToSearch.Add(neighborPos);
-                        }
+                    if (!cellsToSearch.Contains(neighborPos)) {
+                        cellsToSearch.Add(neighborPos);
                     }
                 }
             }

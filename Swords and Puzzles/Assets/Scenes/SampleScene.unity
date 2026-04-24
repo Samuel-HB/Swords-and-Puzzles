@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 249705157}
   - component: {fileID: 249705159}
   - component: {fileID: 249705156}
-  - component: {fileID: 249705165}
   - component: {fileID: 249705161}
   - component: {fileID: 249705162}
   - component: {fileID: 249705160}
@@ -407,19 +406,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &249705165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 249705155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f3d1f0eee1b67b4fb4ec9d2012d1f13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  health: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -14333,6 +14319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDetection
   shootOnPlayer: {fileID: 1334743740}
   radius: 20
+  durationBeforeFirstDetection: 0.2
 --- !u!114 &1334743740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14345,8 +14332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 884db05bcff8a114ea6419707035cd9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootOnPlayer
-  bulletPrefab: {fileID: 6929203748778761548, guid: c534c49da32f9ca4ebbb2f086fb012c7, type: 3}
   target: {fileID: 0}
+  bulletPrefab: {fileID: 6929203748778761548, guid: c534c49da32f9ca4ebbb2f086fb012c7, type: 3}
+  bulletSpeed: 10
 --- !u!1 &1576386787
 GameObject:
   m_ObjectHideFlags: 0
