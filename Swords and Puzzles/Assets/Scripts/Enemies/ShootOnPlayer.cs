@@ -1,16 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShootOnPlayer : MonoBehaviour
+public class ShootOnPlayer : PlayerDetection
 {
+
     private bool canShoot = true;
 
-    private Transform[] bullets = new Transform[100]; // 5
+    private Transform[] bullets = new Transform[100];
     private int bulletIndex = 0;
     [HideInInspector] public Transform target;
     [SerializeField] private Transform bulletPrefab;
 
-    [SerializeField] private float bulletSpeed = 10f;
+    [SerializeField] private float bulletSpeed = 20f;
     private float shootDuration = 2f;
     private float durationBetweenShoots = 0.05f;
     private int bulletsGap = 0;
@@ -23,7 +24,7 @@ public class ShootOnPlayer : MonoBehaviour
     private float spacingMultiplier = 2f;
 
 
-    private void Start()
+    protected void InstantiateBullets()
     {
         bulletsGap = maxBulletsGap;
 
@@ -39,9 +40,11 @@ public class ShootOnPlayer : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    protected void Shoot()
     {
-        if (canShoot) {
+        if (canShoot)
+        {
+            target = transformDetected;
             StartCoroutine(BulletBurst());
         }
     }
@@ -69,7 +72,7 @@ public class ShootOnPlayer : MonoBehaviour
 
     private void ActivateBullet(Transform bullet)
     {
-        bullet.transform.position = transform.position;
+        bullet.position = transform.position;
 
         bullet.GetComponent<SpriteRenderer>().enabled = true;
 

@@ -25,9 +25,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChargedAttack",
+                    "name": "UseItem",
                     "type": "Button",
-                    "id": "bc61dc56-694c-4944-ad1e-af6b7c0b5911",
+                    "id": "b0de9e46-66d3-4084-8731-8715b2b5efc7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShiftItemLeft",
+                    "type": "Button",
+                    "id": "a7226737-46d0-4ba6-bf78-5a8619b04862",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShiftItemRight",
+                    "type": "Button",
+                    "id": "41b587dc-0108-4253-86c4-e627e1ec9459",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -102,37 +120,37 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Button With One Modifier",
-                    "id": "fa1ef544-8f9d-4c4f-88f6-6070fd76279b",
-                    "path": "ButtonWithOneModifier(modifiersOrder=2)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChargedAttack",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Modifier",
-                    "id": "35da0cb9-3d96-4085-81fc-b341c442ba0c",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChargedAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Button",
-                    "id": "6ac34e03-c9a3-46ad-9255-acdc3fba4c20",
+                    "name": "",
+                    "id": "2ed2181a-01c4-455a-86e8-f326c3f20043",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChargedAttack",
+                    "action": "UseItem",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "729373c3-5106-463b-8737-f426c1ab110a",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShiftItemLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cdd0e1fb-c24a-43d8-a85b-cfaeb39be256",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShiftItemRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

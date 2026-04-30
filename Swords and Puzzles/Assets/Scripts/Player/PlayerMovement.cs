@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Player player;
+
     public InputActionReference moveAction;
     private Vector2 currentInputValue;
     private Vector3 movementDirection;
@@ -40,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        player = GetComponent<Player>();
+
         wallLayerMask = 1 << LayerMask.NameToLayer("Default");
         wallOnlyForPlayerLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
     }
@@ -71,15 +75,19 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputValue.y > 0.01f){
             finalDirection = new Vector2(0, 1);
+            player.direction = Directions.North;
         }
         else if (inputValue.y < -0.01f) {
             finalDirection = new Vector2(0, -1);
+            player.direction = Directions.South;
         }
         else if (inputValue.x > 0.01f) {
             finalDirection = new Vector2(1, 0);
+            player.direction = Directions.East;
         }
         else if (inputValue.x < -0.01f) {
             finalDirection = new Vector2(-1, 0);
+            player.direction = Directions.West;
         }
         //else {
         //    finalDirection = Vector2.zero;

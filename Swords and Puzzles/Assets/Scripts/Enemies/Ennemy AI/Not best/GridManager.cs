@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour
 {
-    public Dictionary<Vector2, Cell> cells;
+    public Dictionary<Vector2Int, Cell> cells;
 
     [SerializeField] public int gridHeight = 10; // put in awake tilemap bounds instead
     [SerializeField] public int gridWidth = 10;
@@ -49,12 +49,14 @@ public class GridManager : MonoBehaviour
 
     private void GenerateGrid()
     {
-        cells = new Dictionary<Vector2, Cell>();
-        for (float x = 0; x < gridWidth; x += cellWidth) { // use int instead if float is not necessary
-            for (float y = 0; y < gridHeight; y += cellHeight) // use int instead if float is not necessary
+        cells = new Dictionary<Vector2Int, Cell>();
+        //for (float x = 0; x < gridWidth; x += cellWidth) {
+        //    for (float y = 0; y < gridHeight; y += cellHeight)
+        for (int x = 0; x < gridWidth; x += 1) {
+            for (int y = 0; y < gridHeight; y += 1)
             {
-                Vector2 pos = new Vector2(x, y);
-                cells.Add(pos, new Cell(pos));
+                Vector2Int pos = new Vector2Int(x, y);
+                cells.Add(pos, new Cell((Vector2Int)new Vector2Int((int)Mathf.Round(pos.x), (int)Mathf.Round(pos.y))));
             }
         }
 
@@ -79,10 +81,16 @@ public class GridManager : MonoBehaviour
         //print("tilemap.cellBounds.xMax" + tilemap.cellBounds.xMax);
         //print("tilemap.cellBounds.yMin" + tilemap.cellBounds.yMin);
         //print("tilemap.cellBounds.yMax" + tilemap.cellBounds.yMax);
-        print("size X" + tilemap.size.x);
-        print("size Y" + tilemap.size.y);
-        print("tilemap.cellBounds.size.x" + tilemap.cellBounds.size.x);
-        print("tilemap.cellBounds.size.y" + tilemap.localBounds.size.y);
+
+
+
+        //print("size X" + tilemap.size.x);
+        //print("size Y" + tilemap.size.y);
+        //print("tilemap.cellBounds.size.x" + tilemap.cellBounds.size.x);
+        //print("tilemap.cellBounds.size.y" + tilemap.localBounds.size.y);
+
+
+
 
         //for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++) {
         //    for (int y = tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
@@ -101,10 +109,13 @@ public class GridManager : MonoBehaviour
             {
                 Vector3Int localPos = new Vector3Int(x, y, (int)tilemap.transform.position.y);
 
-                print("tilemapBoundX: " + tilemapBoundX);
-                print("tilemapBoundY: " + tilemapBoundY);
-                print("gridWidth: " + gridWidth);
-                print("gridHeight: " + gridHeight);
+
+                //print("tilemapBoundX: " + tilemapBoundX);
+                //print("tilemapBoundY: " + tilemapBoundY);
+                //print("gridWidth: " + gridWidth);
+                //print("gridHeight: " + gridHeight);
+
+
 
 
                 // if prefab tile isn't visible by tilemap use classic tiles to position obstacles

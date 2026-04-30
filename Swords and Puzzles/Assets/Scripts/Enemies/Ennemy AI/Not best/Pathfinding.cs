@@ -152,7 +152,8 @@ public class Pathfinding : MonoBehaviour
             for (float y = 0; y < gridHeight; y += cellHeight) // use int instead if float is not necessary
             {
                 Vector2 pos = new Vector2(x, y);
-                cells.Add(pos, new Cell(pos));
+                //comment because only vector2
+                //cells.Add(pos, new Cell(pos));
             }
         }
 
@@ -253,13 +254,15 @@ public class Pathfinding : MonoBehaviour
             Vector2 neighborPos = new Vector2(x, y);
             if (cells.TryGetValue(neighborPos, out Cell c) && !cellsAlreadySearched.Contains(neighborPos) && !cells[neighborPos].isObstacle)
             {
-                int gCostToNeighbor = cells[cellPos].gCost + GetDistance(cellPos, neighborPos);
+                //int gCostToNeighbor = cells[cellPos].gCost + GetDistance(cellPos, neighborPos);
+                float gCostToNeighbor = cells[cellPos].gCost + Vector2.Distance(cellPos, neighborPos);
 
                 if (gCostToNeighbor < cells[neighborPos].gCost)
                 {
                     Cell neighborNode = cells[neighborPos];
 
-                    neighborNode.connection = cellPos;
+                    // commment because only vector2
+                    //neighborNode.connection = cellPos;
                     neighborNode.gCost = gCostToNeighbor;
                     neighborNode.hCost = GetDistance(neighborPos, endPos);
                     neighborNode.fCost = neighborNode.gCost + neighborNode.hCost;
