@@ -21,13 +21,8 @@ public class Bomb : MonoBehaviour, IUsable
         {
             ActivateBomb(bombs[bombIndex]);
 
-            if (bombIndex < bombs.Length - 1)
-            {
-                bombIndex++;
-            }
-            else {
-                bombIndex = 0;
-            }
+            bombIndex = bombIndex < bombs.Length - 1 ?            
+                bombIndex += 1 : bombIndex = 0;            
         }
     }
 
@@ -40,7 +35,6 @@ public class Bomb : MonoBehaviour, IUsable
             bombs[i] = Instantiate(bombPrefab, shootPoint.position, Quaternion.identity);
 
             bombs[i].GetComponent<SpriteRenderer>().enabled = false;
-
             if (bombs[i].TryGetComponent<BombProjectile>(out BombProjectile bomb)) {
                 bomb.enabled = false;
             }

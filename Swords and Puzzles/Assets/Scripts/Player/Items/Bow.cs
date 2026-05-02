@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Bow : MonoBehaviour, IUsable
 {
     private Player player;
+
+    public event Action firingArrow;
 
     private bool canShoot = true;
 
@@ -22,13 +25,10 @@ public class Bow : MonoBehaviour, IUsable
         {
             ActivateArrow(arrows[arrowIndex]);
 
-            if (arrowIndex < arrows.Length - 1)
-            {
-                arrowIndex++;
-            }
-            else {
-                arrowIndex = 0;
-            }
+            arrowIndex = arrowIndex < arrows.Length - 1 ?
+                arrowIndex += 1 : arrowIndex = 0;
+
+            firingArrow?.Invoke();
         }
     }
 
@@ -41,7 +41,6 @@ public class Bow : MonoBehaviour, IUsable
             arrows[i] = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
 
             arrows[i].GetComponent<SpriteRenderer>().enabled = false;
-
             if (arrows[i].TryGetComponent<ArrowProjectile>(out ArrowProjectile arrow)) {
                 arrow.enabled = false;
             }
