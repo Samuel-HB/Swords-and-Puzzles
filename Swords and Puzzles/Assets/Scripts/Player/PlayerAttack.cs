@@ -1,24 +1,33 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public InputActionReference attackAction;
+    private Player player;
 
-    private void OnEnable()
+    private void Start()
     {
-        attackAction.action.started += OnAttackActionPerformed;
-        attackAction.action.Enable();
+        player = GetComponent<Player>();        
     }
 
-    private void OnAttackActionPerformed(InputAction.CallbackContext context)
+    public void OnAttackPerformed()
     {
-        print("attack");
+        switch (player.state)
+        {
+            case PlayerState.UsingItem:
+                break;
+            case PlayerState.SwordAttacking:
+                break;
+            case PlayerState.Idle:
+                OnAttack();
+                break;
+            default:
+                break;
+        }
     }
 
-    private void Disable()
+    private void OnAttack()
     {
-        attackAction.action.started -= OnAttackActionPerformed;
-        attackAction.action.Disable();
+        player.CallStateTimer(PlayerState.SwordAttacking, player.swordDuration);
+        EventManager.SwordAttack();
     }
 }

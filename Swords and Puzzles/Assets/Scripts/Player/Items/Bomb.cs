@@ -4,6 +4,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour, IUsable
 {
     private Player player;
+    private Inventory inventory;
 
     private bool canShoot = true;
 
@@ -22,13 +23,18 @@ public class Bomb : MonoBehaviour, IUsable
             ActivateBomb(bombs[bombIndex]);
 
             bombIndex = bombIndex < bombs.Length - 1 ?            
-                bombIndex += 1 : bombIndex = 0;            
+                bombIndex += 1 : bombIndex = 0;
+
+            player.CallStateTimer(PlayerState.UsingItem, player.bombDuration);
+            inventory.RemoveItem(ref inventory.bombsCount, inventory.bomb);
+            EventManager.ThrowBomb();
         }
     }
 
     private void Start()
     {
         player = GetComponent<Player>();
+        inventory = GetComponent<Inventory>();
 
         for (int i = 0; i < bombs.Length; i++)
         {

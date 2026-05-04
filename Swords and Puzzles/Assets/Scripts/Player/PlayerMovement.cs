@@ -5,9 +5,9 @@ public class PlayerMovement : MonoBehaviour
 {
     private Player player;
 
-    public InputActionReference moveAction;
     private Vector2 currentInputValue;
     private Vector3 movementDirection;
+    private Vector3 desiredMovementDirection = Vector2.zero;
     private float speed = 5f;
 
     private Vector2 boxLength = new Vector2(0.95f, 0.95f);
@@ -15,24 +15,6 @@ public class PlayerMovement : MonoBehaviour
     private int wallLayerMask = 0;
     private int wallOnlyForPlayerLayerMask = 0;
 
-
-    private void OnEnable()
-    {
-        moveAction.action.performed += OnMoveActionPerformed;
-        moveAction.action.canceled += OnMoveActionCanceled;
-        moveAction.action.Enable();
-    }
-
-    private void OnMoveActionPerformed(InputAction.CallbackContext context)
-    {
-        currentInputValue = context.ReadValue<Vector2>().normalized;
-        movementDirection = GetDirection(currentInputValue);
-    }
-
-    private void OnMoveActionCanceled(InputAction.CallbackContext context)
-    {
-        movementDirection = Vector2.zero;
-    }
 
     private void OnDrawGizmos()
     {
@@ -42,31 +24,77 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        EventManager.firingArrow += StopMovementTemporarly;
+        EventManager.throwingBomb += StopMovementTemporarly;
+        EventManager.goingBackToIdle += RegainMovement;
+
         player = GetComponent<Player>();
 
         wallLayerMask = 1 << LayerMask.NameToLayer("Default");
         wallOnlyForPlayerLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
     }
 
+    public void OnMovePerformed(InputAction.CallbackContext context)
+    {
+        currentInputValue = context.ReadValue<Vector2>().normalized;
+        desiredMovementDirection = GetDirection(currentInputValue);
+
+        switch (player.state)
+        {
+            case PlayerState.UsingItem:
+                break;
+            case PlayerState.Idle:
+                OnMove(context);
+                break;
+            case PlayerState.SwordAttacking:
+                OnMove(context); // add reduction of velocity
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        movementDirection = desiredMovementDirection;
+        EventManager.PlayerMove();
+    }
+
+    public void OnMoveCanceled()
+    {
+        desiredMovementDirection = Vector2.zero;
+
+        movementDirection = Vector2.zero;
+        EventManager.PlayerMoveStop();
+    }
+
+    private void StopMovementTemporarly()
+    {
+        movementDirection = Vector2.zero;
+    }
+
+    private void RegainMovement()
+    {
+        movementDirection = desiredMovementDirection;
+    }
+
+
     private void Update()
     {
         transform.position += movementDirection * speed * Time.deltaTime;
-        //transform.position = new Vector3(((int)transform.position.x)/4, ((int)transform.position.y)/4);
 
-                                                                                  // check all layers wall tiles can have in project
-        Collider2D wallCollider = Physics2D.OverlapBox(transform.position, boxLength, 0f, wallLayerMask | wallOnlyForPlayerLayerMask);
+        Collider2D wallCollider = Physics2D.OverlapBox(transform.position, boxLength, 0f,
+                                                       wallLayerMask | wallOnlyForPlayerLayerMask);
+                                                    // check all layers wall tiles can have in project
         if (wallCollider != null)
         {
             if (wallCollider.TryGetComponent<WallTile>(out WallTile wallTile))
             {
                 Vector3 difference = transform.position - lastPosition;
-                //difference = new Vector3((int)difference.x, (int)difference.y);
-                //transform.position -= difference * speed * Time.deltaTime;
                 transform.position -= difference;
             }
         }
         lastPosition = transform.position;
-        //lastPosition = new Vector3((int)transform.position.x, (int)transform.position.y);
     }
 
     private Vector2 GetDirection(Vector2 inputValue)
@@ -89,16 +117,16 @@ public class PlayerMovement : MonoBehaviour
             finalDirection = new Vector2(-1, 0);
             player.direction = Directions.West;
         }
-        //else {
-        //    finalDirection = Vector2.zero;
-        //}
         return finalDirection;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        moveAction.action.performed -= OnMoveActionPerformed;
-        moveAction.action.canceled -= OnMoveActionCanceled;
-        moveAction.action.Disable();
+        // maybe problem because some event subscribes are in enable and others in start 
+        // so maybe put all of the events subscribes in enable or chose to unsubscribe
+        // in disable and in ondestroy
+        EventManager.firingArrow -= StopMovementTemporarly;
+        EventManager.throwingBomb -= StopMovementTemporarly;
+        EventManager.goingBackToIdle -= RegainMovement;
     }
 }

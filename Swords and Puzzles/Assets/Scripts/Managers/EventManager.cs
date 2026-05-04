@@ -1,12 +1,44 @@
 using System;
-using UnityEngine;
 
-public class EventManager : MonoBehaviour
+public static class EventManager
 {
-    //public static event Action firingArrow;
+    public static event Action playerMoving;
+    public static event Action playerStopMoving;
+    public static event Action firingArrow;
+    public static event Action throwingBomb;
+    public static event Action swordAttacking;
+    public static event Action goingBackToIdle;
 
-    private void Start()
+    public static event Action updatingItems;
+
+    public static void PlayerMove()
     {
-        //EventManager.firingArrow?.Invoke();
+        playerMoving?.Invoke();
+    }
+    public static void PlayerMoveStop()
+    {
+        playerStopMoving?.Invoke();
+    }
+    public static void FireArrow()
+    {
+        firingArrow?.Invoke();
+    }
+    public static void ThrowBomb()
+    {
+        throwingBomb?.Invoke();
+    }
+    public static void SwordAttack()
+    {
+        swordAttacking?.Invoke();
+    }
+    public static void BackToIdle()
+    {
+        goingBackToIdle?.Invoke();
+    }
+
+
+    public static void UpdateItems()
+    {
+        updatingItems?.Invoke();
     }
 }

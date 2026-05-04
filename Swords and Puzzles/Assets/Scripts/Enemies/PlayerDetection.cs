@@ -13,7 +13,7 @@ public class PlayerDetection : Ennemy
         Gizmos.color = new Color(1f, 0.25f, 0.25f, 0.6f);
         Gizmos.DrawWireSphere(transform.position, radius);
     }
-
+    
     protected void SetPlayerLayerMask()
     {
         playerLayerMask = 1 << LayerMask.NameToLayer("Player");

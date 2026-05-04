@@ -1,12 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class Bow : MonoBehaviour, IUsable
 {
     private Player player;
-
-    public event Action firingArrow;
+    private Inventory inventory;
 
     private bool canShoot = true;
 
@@ -17,7 +15,6 @@ public class Bow : MonoBehaviour, IUsable
 
     [SerializeField] private float arrowSpeed = 20;
     private float shootDuration = 2f;
-    //private float durationBetweenShoots = 0.05f;
 
     public void UseItem()
     {
@@ -28,13 +25,16 @@ public class Bow : MonoBehaviour, IUsable
             arrowIndex = arrowIndex < arrows.Length - 1 ?
                 arrowIndex += 1 : arrowIndex = 0;
 
-            firingArrow?.Invoke();
+            player.CallStateTimer(PlayerState.UsingItem, player.bowDuration);
+            inventory.RemoveItem(ref inventory.arrowsCount, inventory.bow);
+            EventManager.FireArrow();
         }
     }
 
     private void Start()
     {
         player = GetComponent<Player>();
+        inventory = GetComponent<Inventory>();
 
         for (int i = 0; i < arrows.Length; i++)
         {

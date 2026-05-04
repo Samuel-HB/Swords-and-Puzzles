@@ -1,90 +1,48 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerUseItem : MonoBehaviour
 {
-    public InputActionReference useObjectAction;
-    public InputActionReference shiftItemLeftAction;
-    public InputActionReference shiftItemRightAction;
-
-    private List<IUsable> items;
-    [SerializeField] private Key key;
-    [SerializeField] private Bomb bomb;
-    [SerializeField] private Bow bow;
-
+    private Player player;
+    private Inventory inv;
 
     private void Start()
     {
-        items = new List<IUsable>() { key, bomb,  bow };
+        player = GetComponent<Player>(); 
+        inv = GetComponent<Inventory>();
     }
 
-    private void OnEnable()
+    public void UseItem()
     {
-        useObjectAction.action.started += OnUseItemtActionPerformed;
-        useObjectAction.action.Enable();
-
-        shiftItemLeftAction.action.started += OnShiftItemtLeftActionPerformed;
-        shiftItemLeftAction.action.Enable();
-
-        shiftItemRightAction.action.started += OnShiftItemtRightActionPerformed;
-        shiftItemRightAction.action.Enable();
-    }
-
-    private void OnUseItemtActionPerformed(InputAction.CallbackContext context)
-    {
-        if (items[0] != null) {
-            items[0].UseItem();
+        if (inv.items.Count > 0 && player.state != PlayerState.UsingItem) {
+            inv.items[0].UseItem();
         }
     }
 
-    private void OnShiftItemtLeftActionPerformed(InputAction.CallbackContext context)
+    public void ShiftItemLeft()
     {
-        ShiftItemLeft();
-    }
+        if (inv.items.Count < 2) return;
 
-    private void OnShiftItemtRightActionPerformed(InputAction.CallbackContext context)
-    {
-        ShiftItemRight();
-    }
+        IUsable tempItem = inv.items[0];
 
-    private void ShiftItemLeft()
-    {
-        IUsable tempItem = items[0];
-
-        for (int i = 0; i < items.Count - 1; i++) {
-            items[i] = items[i + 1];
+        for (int i = 0; i < inv.items.Count - 1; i++) {
+            inv.items[i] = inv.items[i + 1];
         }
-        items[items.Count - 1] = tempItem;
+        inv.items[inv.items.Count - 1] = tempItem;
+
+        EventManager.UpdateItems();
     }
 
-    private void ShiftItemRight()
+    public void ShiftItemRight()
     {
-        IUsable tempItem = items[items.Count - 1];
+        if (inv.items.Count < 2) return;
 
-        for (int i = items.Count - 1; i > 0; i--) {
-            items[i] = items[i - 1];
+        IUsable tempItem = inv.items[inv.items.Count - 1];
+
+        for (int i = inv.items.Count - 1; i > 0; i--) {
+            inv.items[i] = inv.items[i - 1];
         }
-        items[0] = tempItem;
-    }
+        inv.items[0] = tempItem;
 
-    //private void ShowList()
-    //{
-    //    foreach (IUsable item in items) {
-    //        print(item);
-    //    }
-    //    print("");
-    //}
-
-    private void OnDisable()
-    {
-        useObjectAction.action.started -= OnUseItemtActionPerformed;
-        useObjectAction.action.Disable();
-
-        shiftItemLeftAction.action.started -= OnShiftItemtLeftActionPerformed;
-        shiftItemLeftAction.action.Disable();
-
-        shiftItemRightAction.action.started -= OnShiftItemtRightActionPerformed;
-        shiftItemRightAction.action.Disable();
+        EventManager.UpdateItems();
     }
 }
