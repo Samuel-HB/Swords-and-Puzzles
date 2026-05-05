@@ -72,14 +72,11 @@ public class PlayerAnimations : PlayerAnimationNames
             default:
                 break;
         }
-
-        //if (player.state == PlayerState.UsingItem) return; // or sword attacking
-        //                                                   // use switch
     }
 
     public void ChoseAnim(string animUp, string animDown, string animRight, float animTime)
     {
-        float timeToWait = animTime; // useless ?
+        //float timeToWait = animTime; // useless ?
         switch (player.direction)
         {
             case Directions.North:

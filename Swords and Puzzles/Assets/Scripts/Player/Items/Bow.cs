@@ -16,6 +16,7 @@ public class Bow : MonoBehaviour, IUsable
     [SerializeField] private float arrowSpeed = 20;
     private float shootDuration = 2f;
 
+
     public void UseItem()
     {
         if (canShoot)

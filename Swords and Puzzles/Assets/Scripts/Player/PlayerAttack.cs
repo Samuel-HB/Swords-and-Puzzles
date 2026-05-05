@@ -6,17 +6,13 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<Player>();        
+        player = GetComponent<Player>();
     }
 
     public void OnAttackPerformed()
     {
         switch (player.state)
         {
-            case PlayerState.UsingItem:
-                break;
-            case PlayerState.SwordAttacking:
-                break;
             case PlayerState.Idle:
                 OnAttack();
                 break;

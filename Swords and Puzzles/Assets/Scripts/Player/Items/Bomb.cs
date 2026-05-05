@@ -16,6 +16,7 @@ public class Bomb : MonoBehaviour, IUsable
     [SerializeField] private float throwDistance = 7;
     private float shootDuration = 0.4f;
 
+
     public void UseItem()
     {
         if (canShoot) 

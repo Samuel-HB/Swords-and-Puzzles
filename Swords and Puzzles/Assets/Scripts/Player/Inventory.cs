@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour
         items = new List<IUsable>() { key, bomb, bow };
     }
 
-    public void AddItem(int countToIncrease, IUsable itemToAdd)
+    public void AddItem(ref int countToIncrease, IUsable itemToAdd)
     {
         countToIncrease++;
         if (!items.Contains(itemToAdd)) {

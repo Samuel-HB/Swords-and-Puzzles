@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ArrowCollectible : MonoBehaviour, IPickable
 {
-    public void PickItem(Inventory inventory)
+    public void PickItem(Inventory inv)
     {
-        inventory.AddItem(inventory.arrowsCount, inventory.bow);
+        inv.AddItem(ref inv.arrowsCount, inv.bow);
         Destroy(gameObject);
     }
 }

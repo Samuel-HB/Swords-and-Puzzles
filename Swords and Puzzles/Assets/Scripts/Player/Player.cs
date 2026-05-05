@@ -11,7 +11,7 @@ public class Player : MonoBehaviour, IDamageable
 
     public float bowDuration = 0.5f;
     public float bombDuration = 0.25f;
-    public float swordDuration = 0.5f;
+    public float swordDuration = 0.35f;
 
 
     public void TakeDamage(int damage)
