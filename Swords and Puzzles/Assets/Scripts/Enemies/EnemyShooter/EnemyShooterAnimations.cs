@@ -44,30 +44,32 @@ public class EnemyShooterAnimations : MonoBehaviour
         }
     }    
 
+    private Directions GetDirectionInRangeOfFour(Vector3 direction)
+    {
+        direction = (Quaternion.AngleAxis(45, Vector3.forward) * direction).normalized;
+
+        if (direction.x < 0 && direction.y > 0) {
+            return Directions.North;
+        }
+        else if (direction.x > 0 && direction.y < 0) {
+            return Directions.South;
+        }
+        else if (direction.x > 0 && direction.y > 0) {
+            return Directions.East;
+        }
+        else if (direction.x < 0 && direction.y < 0) {
+            return Directions.West;
+        }
+        else {
+            return Directions.North;
+        }
+    }
+
     private void ChangeAnimState(string newState, bool isFlipX)
     {
         spriteRenderer.flipX = isFlipX;
         childrenSpriteRenderer.flipX = isFlipX;
         animator.CrossFadeInFixedTime(newState, 0f);
-    }
-
-    private Directions GetDirectionInRangeOfFour(Vector3 direction)
-    {
-        print("direction.x: " + direction.x);
-        if (direction.x > -0.5f && direction.x < 0.5f && direction.y > 0) {
-            return Directions.North;
-        }
-        if (direction.x > -0.5f && direction.x < 0.5f && direction.y < 0) {
-            return Directions.South;
-        }
-        if (direction.x < 0) {
-            return Directions.West;
-        }
-        if (direction.x > 0) {
-            return Directions.East;
-        }
-
-        return Directions.North;
     }
 
     private void OnDestroy()

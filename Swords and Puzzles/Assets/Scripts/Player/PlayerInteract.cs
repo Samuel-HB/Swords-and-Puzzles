@@ -28,7 +28,6 @@ public class PlayerInteract : MonoBehaviour
         Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
         if (hitCollider != null)
         {
-            print("hitCollider: " + hitCollider);
             if (hitCollider.TryGetComponent<IPickable>(out IPickable iPickable)) {
                 iPickable.PickItem(inventory);
             }
