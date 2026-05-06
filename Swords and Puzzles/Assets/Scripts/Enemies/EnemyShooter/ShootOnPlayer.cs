@@ -1,5 +1,6 @@
-using UnityEngine;
+using System;
 using System.Collections;
+using UnityEngine;
 
 public class ShootOnPlayer : PlayerDetection
 {
@@ -22,6 +23,8 @@ public class ShootOnPlayer : PlayerDetection
     private int maxBulletByShootBurst = 10;
     private int bulletAngle = 1;
     private float spacingMultiplier = 2f;
+
+    [NonSerialized] public Vector3 shotDirection = new Vector3(0, 0);
 
 
     protected void InstantiateBullets()
@@ -58,13 +61,10 @@ public class ShootOnPlayer : PlayerDetection
         {
             bulletShootedAmount++;
             ActivateBullet(bullets[bulletIndex]);
-            if (bulletIndex < bullets.Length - 1)
-            {
-                bulletIndex++;
-            }
-            else {
-                bulletIndex = 0;
-            }
+
+            bulletIndex = bulletIndex < bullets.Length - 1 ?
+                bulletIndex += 1 : bulletIndex = 0;
+
             yield return new WaitForSeconds(durationBetweenShoots);
         }
         canShoot = true;
@@ -82,13 +82,19 @@ public class ShootOnPlayer : PlayerDetection
         StartCoroutine(ShootOnPlayerTimer(bullet));
     }
 
+
     IEnumerator ShootOnPlayerTimer(Transform bullet)
     {
         float time = 0f;
-        Vector3 direction = (target.transform.position - transform.position);
+        shotDirection = target.transform.position - transform.position;
         bulletAngle *= -1;
 
-        direction = (Quaternion.AngleAxis(bulletsGap * spacingMultiplier * bulletAngle, Vector3.forward) * direction).normalized;
+        EventManager.ShootOnPlayer();
+
+        // new variable to have "shotDirection" outside the scope and public while "direction" stays in this scope
+        // and unafacted by the modifications on "shotDirection" (so remains the same during the while loop below)
+        Vector3 direction = (Quaternion.AngleAxis(bulletsGap * spacingMultiplier * bulletAngle, Vector3.forward)
+                            * shotDirection).normalized;
 
         bulletsGap--;
         if (bulletsGap <= 0) {

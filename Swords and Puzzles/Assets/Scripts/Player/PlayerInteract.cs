@@ -4,6 +4,7 @@ public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] private float radius = 1.5f;
     private int playerLayerMask = 0;
+    private int ignoreRaycastLayerMask = 0;
 
     private Inventory inventory;
 
@@ -18,13 +19,16 @@ public class PlayerInteract : MonoBehaviour
         inventory = GetComponent<Inventory>();
 
         playerLayerMask = 1 << LayerMask.NameToLayer("Player");
+        ignoreRaycastLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
     }
 
     public void OnInteract()
     {
-        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask);
+                                                                               // avoid overlap with himself and sword collider
+        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
         if (hitCollider != null)
         {
+            print("hitCollider: " + hitCollider);
             if (hitCollider.TryGetComponent<IPickable>(out IPickable iPickable)) {
                 iPickable.PickItem(inventory);
             }

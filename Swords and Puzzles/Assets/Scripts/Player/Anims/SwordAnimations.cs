@@ -38,7 +38,7 @@ public class SwordAnimations : MonoBehaviour
                 ChangeAnimState(270, true);
                 break;
             default:
-                ChangeAnimState(0, false);
+                ChangeAnimState(180, false);
                 break;
         }
     }    

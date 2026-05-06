@@ -11,6 +11,9 @@ public static class EventManager
 
     public static event Action updatingItems;
 
+    public static event Action shootingOnPlayer;
+
+
     public static void PlayerMove()
     {
         playerMoving?.Invoke();
@@ -40,5 +43,10 @@ public static class EventManager
     public static void UpdateItems()
     {
         updatingItems?.Invoke();
+    }
+
+    public static void ShootOnPlayer()
+    {
+        shootingOnPlayer?.Invoke();
     }
 }
