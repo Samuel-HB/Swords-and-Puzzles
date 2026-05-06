@@ -53,6 +53,7 @@ public class EnemyShooterAnimations : MonoBehaviour
 
     private Directions GetDirectionInRangeOfFour(Vector3 direction)
     {
+        print("direction.x: " + direction.x);
         if (direction.x > -0.5f && direction.x < 0.5f && direction.y > 0) {
             return Directions.North;
         }
