@@ -24,24 +24,29 @@ public class ArrowProjectile : MonoBehaviour
 
     private void CheckCollision()
     {
-        Collider2D ennemyCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask); // add every layer mask ennemy can have
-        if (ennemyCollider != null)
+        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask);
+        if (hitCollider != null)
         {
-            if (ennemyCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+            if (hitCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
                 iDamageable.TakeDamage(hitDamage);
+                ArrowDeactivation();
             }
-            ArrowDeactivation();
-        }
-        else
-        {
-            Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius);
-            if (hitCollider != null)
-            {
-                if (hitCollider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
-                    ArrowDeactivation();
-                }
+            else if (hitCollider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
+                ArrowDeactivation();
             }
+            //ArrowDeactivation();
         }
+
+        //else
+        //{
+        //    Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius);
+        //    if (hitCollider != null)
+        //    {
+        //        if (hitCollider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
+        //            ArrowDeactivation();
+        //        }
+        //    }
+        //}
     }
 
     private void ArrowDeactivation()

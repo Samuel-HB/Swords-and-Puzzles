@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,9 +10,10 @@ public class Player : MonoBehaviour, IDamageable
     private IEnumerator timer;
     public int health = 0;
 
-    public float bowDuration = 0.5f;
-    public float bombDuration = 0.25f;
-    public float swordDuration = 0.35f;
+    [NonSerialized] public float bowDuration = 0.5f;
+    [NonSerialized] public float bombDuration = 0.25f;
+    [NonSerialized] public float swordDuration = 0.4f;
+    //[NonSerialized] public float swordDuration = 0.5f;
 
 
     public void TakeDamage(int damage)

@@ -54,8 +54,8 @@ public class Bomb : MonoBehaviour, IUsable
 
         bomb.GetComponent<SpriteRenderer>().enabled = true;
 
-        if (bomb.TryGetComponent<BombProjectile>(out BombProjectile arrowProjectile)) {
-            arrowProjectile.enabled = true;
+        if (bomb.TryGetComponent<BombProjectile>(out BombProjectile bombProjectile)) {
+            bombProjectile.enabled = true;
         }
         StartCoroutine(ShootTimer(bomb));
     }
@@ -75,6 +75,9 @@ public class Bomb : MonoBehaviour, IUsable
                                          shootStartPoint + direction * throwDistance,
                                          Mathf.SmoothStep(0f, 1f, time / shootDuration));
             yield return null;
+        }
+        if (bomb.TryGetComponent<BombProjectile>(out BombProjectile bombProjectile)) {
+            bombProjectile.StartWaitBeforeExplodeTimer();
         }
     }
 

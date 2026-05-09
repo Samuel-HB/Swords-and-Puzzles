@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShootOnPlayer : PlayerDetection
 {
-
     private bool canShoot = true;
 
     private Transform[] bullets = new Transform[100];
@@ -79,33 +78,22 @@ public class ShootOnPlayer : PlayerDetection
         if (bullet.TryGetComponent<EnnemyBullet>(out EnnemyBullet ennemyBullet)) {
             ennemyBullet.enabled = true;
         }
-        StartCoroutine(ShootOnPlayerTimer(bullet));
+        CallShot(bullet);
     }
 
-
-    IEnumerator ShootOnPlayerTimer(Transform bullet)
+    private void CallShot(Transform bullet)
     {
-        float time = 0f;
         shotDirection = target.transform.position - transform.position;
-        bulletAngle *= -1;
-
         EventManager.ShootOnPlayer();
 
-        // new variable to have "shotDirection" outside the scope and public while "direction" stays in this scope
-        // and unafacted by the modifications on "shotDirection" (so remains the same during the while loop below)
-        Vector3 direction = (Quaternion.AngleAxis(bulletsGap * spacingMultiplier * bulletAngle, Vector3.forward)
-                            * shotDirection).normalized;
-
+        bulletAngle *= -1;
+        Vector3 direction = (Quaternion.AngleAxis(bulletsGap * spacingMultiplier * bulletAngle, Vector3.forward) *
+                             shotDirection).normalized;
         bulletsGap--;
         if (bulletsGap <= 0) {
             bulletsGap = maxBulletsGap;
         }
 
-        while (time < shootDuration)
-        {
-            time += Time.deltaTime; ;
-            bullet.position += direction * bulletSpeed * Time.deltaTime;
-            yield return null;
-        }
+        InstantiatedKeeper.shotManager.StartShootOnPlayerTimer(bullet, bulletSpeed, shootDuration, direction);
     }
 }

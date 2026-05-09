@@ -97,8 +97,6 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.position += movementDirection * speed * Time.deltaTime;
 
-        //Collider2D wallCollider = Physics2D.OverlapBox(transform.position, boxLength, 0f,
-
         Collider2D wallCollider = Physics2D.OverlapArea((Vector2)transform.position + boxCornerLeftUp,
                                                         (Vector2)transform.position + boxCornerRightDown,
                                                         wallLayerMask | wallOnlyForPlayerLayerMask);

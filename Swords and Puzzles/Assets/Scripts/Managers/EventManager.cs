@@ -8,6 +8,10 @@ public static class EventManager
     public static event Action throwingBomb;
     public static event Action swordAttacking;
     public static event Action goingBackToIdle;
+    public static event Action playerInvulnerability;
+
+    public static event Action bombExploding;
+
 
     public static event Action updatingItems;
 
@@ -38,12 +42,22 @@ public static class EventManager
     {
         goingBackToIdle?.Invoke();
     }
+    public static void PlayerInvulnerability()
+    {
+        playerInvulnerability?.Invoke();
+    }
+
+    public static void BombExplosion()
+    {
+        bombExploding?.Invoke();
+    }
 
 
     public static void UpdateItems()
     {
         updatingItems?.Invoke();
     }
+
 
     public static void ShootOnPlayer()
     {

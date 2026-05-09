@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6929203748778761548}
   - component: {fileID: 5889851648636109690}
-  - component: {fileID: 305553540290846860}
+  - component: {fileID: 6044351810096978087}
+  - component: {fileID: -4363847946223904209}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -82,8 +83,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.19999999, g: 0.19999999, b: 0.19999999, a: 1}
+  m_Sprite: {fileID: -1287082942944092376, guid: 5b27b5f1db184c345ae733147cd0c618, type: 3}
+  m_Color: {r: 0.81886786, g: 0.81886786, b: 0.81886786, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,7 +93,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &305553540290846860
+--- !u!114 &6044351810096978087
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,6 +102,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 2694352771298704407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a247f05559d014f4ea6483f6e0b8e060, type: 3}
+  m_Script: {fileID: 11500000, guid: e75dc603c5cf0f045992b1c0f26cd610, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArrowProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::BombProjectile
+--- !u!95 &-4363847946223904209
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2694352771298704407}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8eb789a838caab44a8aa6364d0d3eecf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

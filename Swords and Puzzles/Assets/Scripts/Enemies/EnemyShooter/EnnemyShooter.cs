@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnnemyShooter : ShootOnPlayer
 {
 
-    [SerializeField] private float durationBeforeFirstDetection = 0.2f;
+    private float durationBeforeFirstDetection = 0.2f;
     private float secondsToWait = 0.2f;
     private IEnumerator timer;
 
@@ -21,7 +21,7 @@ public class EnnemyShooter : ShootOnPlayer
         StartCoroutine(WaitBeforeFirstDetect());
     }
 
-    IEnumerator WaitBeforeFirstDetect() // avoid ennemy instantly attacking player at the start of the level
+    IEnumerator WaitBeforeFirstDetect() // avoid enemy instantly attacking player at the start of the level
     {
         yield return new WaitForSeconds(durationBeforeFirstDetection);
         CallTimer();

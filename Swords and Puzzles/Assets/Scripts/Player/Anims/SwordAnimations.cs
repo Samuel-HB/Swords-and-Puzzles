@@ -14,39 +14,56 @@ public class SwordAnimations : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponentInParent<Animator>();
+        //animator = GetComponentInParent<Animator>();
+        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GetComponentInParent<Player>();
 
         EventManager.swordAttacking += ChoseSwordAttackDirection;
     }
 
+    //public void ChoseSwordAttackDirection()
+    //{
+    //    switch (player.direction)
+    //    {
+    //        case Directions.North:
+    //            ChangeAnimState(180, false);
+    //            break;
+    //        case Directions.South:
+    //            ChangeAnimState(0, false);
+    //            break;
+    //        case Directions.East:
+    //            ChangeAnimState(90, false);
+    //            break;
+    //        case Directions.West:
+    //            ChangeAnimState(270, true);
+    //            break;
+    //        default:
+    //            ChangeAnimState(180, false);
+    //            break;
+    //    }
+    //}
+
     public void ChoseSwordAttackDirection()
     {
         switch (player.direction)
         {
-            case Directions.North:
-                ChangeAnimState(180, false);
-                break;
-            case Directions.South:
-                ChangeAnimState(0, false);
-                break;
             case Directions.East:
-                ChangeAnimState(90, false);
+                ChangeAnimState(false);
                 break;
             case Directions.West:
-                ChangeAnimState(270, true);
+                ChangeAnimState(true);
                 break;
             default:
-                ChangeAnimState(180, false);
+                ChangeAnimState(false);
                 break;
         }
-    }    
+    }
 
-    private void ChangeAnimState(int zRotation, bool isFlipX)
+    private void ChangeAnimState(bool isFlipX)
     {
         spriteRenderer.flipX = isFlipX;
-        transform.eulerAngles = new Vector3(0, 0, zRotation);
+        //transform.eulerAngles = new Vector3(0, 0, zRotation);
 
         animator.Play(swordAttack);
         CallAnimTimer();

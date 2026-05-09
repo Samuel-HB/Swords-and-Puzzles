@@ -1,15 +1,24 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
     private Player player;
     [SerializeField] private PolygonCollider2D swordCollider;
+    [SerializeField] protected GameObject sword;
+
+    private float durationBeforeSwordActivation = 0.1f;
+    private int swordStrength = 1;
+
+    ContactFilter2D contactFilter = new ContactFilter2D();
+    private int playerLayerMask = 0;
+
 
     private void Start()
     {
-        EventManager.goingBackToIdle += DeactivateSword;
-
         player = GetComponent<Player>();
+
+        playerLayerMask = 1 << LayerMask.NameToLayer("Player");
 
         swordCollider.enabled = false;
     }
@@ -28,18 +37,59 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnAttack()
     {
-        swordCollider.enabled = true;
+        StartCoroutine(WaitBeforePhysicalAttack());
         player.CallStateTimer(PlayerState.SwordAttacking, player.swordDuration);
         EventManager.SwordAttack();
     }
 
-    private void DeactivateSword()
+    IEnumerator WaitBeforePhysicalAttack()
     {
+        yield return new WaitForSeconds(durationBeforeSwordActivation);
+
+        ChoseSwordDirection();
+
+        swordCollider.enabled = true;
+
+        contactFilter.useLayerMask = true;
+        contactFilter.layerMask = ~playerLayerMask;
+
+        Collider2D[] enemyColliders = new Collider2D[5] { null, null, null, null, null };
+        int collidersAmount = Physics2D.OverlapCollider(swordCollider, contactFilter, enemyColliders);
+
+        for (int i = 0; i < collidersAmount; i++)
+        {
+            if (enemyColliders[i].TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+                iDamageable.TakeDamage(swordStrength);
+            }
+        }
         swordCollider.enabled = false;
+        //EventManager.BackToIdle();
     }
 
-    private void OnDestroy()
+    public void ChoseSwordDirection()
     {
-        EventManager.goingBackToIdle -= DeactivateSword;
+        switch (player.direction)
+        {
+            case Directions.North:
+                ChangeSwordDirection(180);
+                break;
+            case Directions.South:
+                ChangeSwordDirection(0);
+                break;
+            case Directions.East:
+                ChangeSwordDirection(90);
+                break;
+            case Directions.West:
+                ChangeSwordDirection(270);
+                break;
+            default:
+                ChangeSwordDirection(180);
+                break;
+        }
+    }
+
+    private void ChangeSwordDirection(int zRotation)
+    {
+        sword.transform.eulerAngles = new Vector3(0, 0, zRotation);
     }
 }

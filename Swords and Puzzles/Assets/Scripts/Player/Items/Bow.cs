@@ -63,7 +63,7 @@ public class Bow : MonoBehaviour, IUsable
     IEnumerator ShootTimer(Transform arrow)
     {
         Vector3 direction = new Vector3(0, 0);
-        direction = GetDirection();
+        direction = GetDirection(ref arrow);
 
         float time = 0f;
         while (time < shootDuration)
@@ -74,17 +74,21 @@ public class Bow : MonoBehaviour, IUsable
         }
     }
 
-    private Vector2 GetDirection()
+    private Vector2 GetDirection(ref Transform transform)
     {
         switch (player.direction)
         {
             case Directions.North:
+                transform.eulerAngles = new Vector3(0, 0, 90);
                 return new Vector3(0, 1);
             case Directions.South:
+                transform.eulerAngles = new Vector3(0, 0, 270);
                 return new Vector3(0, -1);
             case Directions.East:
+                transform.eulerAngles = new Vector3(0, 0, 0);
                 return new Vector3(1, 0);
             case Directions.West:
+                transform.eulerAngles = new Vector3(0, 0, 180);
                 return new Vector3(-1, 0);
             default:
                 return new Vector3(0, 1);

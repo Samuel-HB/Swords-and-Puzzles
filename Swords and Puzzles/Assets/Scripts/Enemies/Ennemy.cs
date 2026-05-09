@@ -8,5 +8,13 @@ public class Ennemy : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         health -= damage;
+        if (health <= 0) {
+            EnemyLose();
+        }
+    }
+
+    private void EnemyLose()
+    {
+        Destroy(gameObject);
     }
 }
