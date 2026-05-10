@@ -517,6 +517,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PatrolPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 7963890034689369829, guid: b5f89fd8f7158964bb4948baa5b8443d, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963890034689369829, guid: b5f89fd8f7158964bb4948baa5b8443d, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -527,7 +535,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5584551448516819880, guid: b5f89fd8f7158964bb4948baa5b8443d, type: 3}
   m_PrefabInstance: {fileID: 9178875988838029712}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8943945391609151655
+--- !u!114 &5572359001233521693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

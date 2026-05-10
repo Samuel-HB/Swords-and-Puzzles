@@ -8,7 +8,10 @@ public class TrackOnPlayer : PlayerDetection
     public EnemyState state = new EnemyState();
     public Directions direction = new Directions();
 
-    private float moveSpeed = 3.5f;
+    protected float moveSpeed = 3.5f;
+    protected float initialMoveSpeed = 3.5f;
+    private float moveSpeedMultiplier = 1.75f;
+    private float minDistanceToAttack = 1f;
 
     [SerializeField] private List<Transform> patrolPoints = new List<Transform>();
     private int patrolPointIndex = 0;
@@ -22,6 +25,8 @@ public class TrackOnPlayer : PlayerDetection
     private int enemyDamage = 1;
     [NonSerialized] public float attackDuration = 0.5f;
     private bool canAttack = true;
+
+    [SerializeField] private GameObject hideBackVision;
 
 
     protected void TryTrackPlayer()
@@ -57,9 +62,11 @@ public class TrackOnPlayer : PlayerDetection
 
     protected void TrackPlayer()
     {
+        moveSpeed = initialMoveSpeed * moveSpeedMultiplier;
+
         transform.position = Vector2.MoveTowards(transform.position, targetPoint, moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, targetPoint) < 0.1f)
+        if (Vector3.Distance(transform.position, targetPoint) < minDistanceToAttack)
         {
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 1f, playerLayerMask);
             foreach (Collider2D collider in hitColliders)
@@ -92,7 +99,7 @@ public class TrackOnPlayer : PlayerDetection
         //lookDirection = transform.position - targetPoint;
         lookDirection = targetPoint - transform.position;
 
-        direction = GetDirectionInRangeOfFour(lookDirection);
+        direction = GetDirectionInRangeOfFour(lookDirection, ref hideBackVision);
         //GetSwordDirection();
         GetGameObjectDirection(sword);
 
@@ -125,6 +132,8 @@ public class TrackOnPlayer : PlayerDetection
 
     protected void GoesBackToInitialPosition()
     {
+        moveSpeed = initialMoveSpeed;
+
         targetPoint = lastPatrolPoint;
 
         //transform.position = Vector2.MoveTowards(transform.position, patrolPoints[lastPatrolPoint].position,
@@ -144,31 +153,44 @@ public class TrackOnPlayer : PlayerDetection
 
     IEnumerator CheckDirectionTimer()
     {
-        direction = GetDirectionInRangeOfFour(lookDirection);
+        direction = GetDirectionInRangeOfFour(lookDirection, ref hideBackVision);
         lookDirection = targetPoint - transform.position;
-        yield return new WaitForSeconds(0.2f);
+
+        //yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         CallCheckDirectionTimer();
     }
 
-    private Directions GetDirectionInRangeOfFour(Vector3 direction)
+    private Directions GetDirectionInRangeOfFour(Vector3 direction, ref GameObject hideBackVision)
     {
         direction = (Quaternion.AngleAxis(45, Vector3.forward) * direction).normalized;
 
         if (direction.x < 0 && direction.y > 0) {
+            ChangeHideBackVision(0, -0.6f, 0);
             return Directions.North;
         }
         else if (direction.x > 0 && direction.y < 0) {
+            ChangeHideBackVision(0, 0.25f, 0);
             return Directions.South;
         }
         else if (direction.x > 0 && direction.y > 0) {
+            ChangeHideBackVision(-0.5f, 0, 90);
             return Directions.East;
         }
         else if (direction.x < 0 && direction.y < 0) {
+            ChangeHideBackVision(0.5f, 0, 90);
             return Directions.West;
         }
         else {
+            ChangeHideBackVision(0, -0.6f, 0);
             return Directions.North;
         }
+    }
+
+    private void ChangeHideBackVision(float xPos, float yPos, float zRotation)
+    {
+        hideBackVision.transform.localPosition = new Vector2(xPos, yPos);
+        hideBackVision.transform.eulerAngles = new Vector3(0, 0, zRotation);
     }
 
     private void GetGameObjectDirection(GameObject go)

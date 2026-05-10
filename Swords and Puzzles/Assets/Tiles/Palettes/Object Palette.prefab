@@ -41,7 +41,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6449141090381711248}
   m_Enabled: 1
-  m_CellSize: {x: 4, y: 1.5625, z: 0}
+  m_CellSize: {x: 1, y: 1, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -98,29 +98,29 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 2.438058e+32
+      e00: -0.000005209353
       e01: 0
-      e02: 2.1587794e+19
-      e03: -3.7947117e-19
-      e10: 4.5907e-41
+      e02: -0.0000052093237
+      e03: 2.0571174e-38
+      e10: 2.55e-43
       e11: 0
-      e12: 1.3e-43
-      e13: 6.6e-43
+      e12: 2.55e-43
+      e13: 8.07e-43
       e20: 1095548
       e21: 0
-      e22: -1.1309987e+24
-      e23: 3.1298384e-28
+      e22: 1.9150228e+15
+      e23: -2.6308748e-19
       e30: 4.5907e-41
       e31: 0
-      e32: 6.66e-43
-      e33: 6.61e-43
+      e32: 8.13e-43
+      e33: 8.07e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 6.1283722e-33, g: 6.1283722e-33, b: 6.1283722e-33, a: 6.1283722e-33}
+    m_Data: {r: 0, g: 0, b: 0, a: 0}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -1, y: 0, z: 0}
+  m_Origin: {x: 3, y: 0, z: 0}
   m_Size: {x: 1, y: 1, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
@@ -205,6 +205,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7359099906318754684}
     m_Modifications:
+    - target: {fileID: 486116891127069973, guid: 088b8d6f8234e304eb028a88fadefe88, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 486116891127069973, guid: 088b8d6f8234e304eb028a88fadefe88, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4028938958700349287, guid: 088b8d6f8234e304eb028a88fadefe88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -249,6 +257,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 4064560228965611574, guid: 088b8d6f8234e304eb028a88fadefe88, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -259,7 +271,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4028938958700349287, guid: 088b8d6f8234e304eb028a88fadefe88, type: 3}
   m_PrefabInstance: {fileID: 2305910229884424315}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7196583452674241332
+--- !u!114 &2056027081944030704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

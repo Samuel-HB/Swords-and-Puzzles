@@ -9,6 +9,7 @@ public class EnemyTracker : TrackOnPlayer
 
     private void Start()
     {
+        moveSpeed = initialMoveSpeed;
         state = EnemyState.Patrol;
         swordCollider.enabled = false;
 
