@@ -24,13 +24,22 @@ public class PlayerInteract : MonoBehaviour
 
     public void OnInteract()
     {
-                                                                               // avoid overlap with himself and sword collider
-        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
-        if (hitCollider != null)
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
+        foreach (Collider2D collider in hitColliders)
         {
-            if (hitCollider.TryGetComponent<IPickable>(out IPickable iPickable)) {
-                iPickable.PickItem(inventory);
+            if (collider != null && collider.TryGetComponent<IInteractable>(out IInteractable iInteractable)) {
+                iInteractable.Interact(inventory);
             }
         }
+        // avoid overlap with himself and sword collider
+        //Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
+        //if (hitCollider != null)
+        //{
+        //    print("try interact");
+        //    print(hitCollider);
+        //    if (hitCollider.TryGetComponent<IInteractable>(out IInteractable iInteractable)) {
+        //        iInteractable.Interact(inventory);
+        //    }
+        //}
     }
 }

@@ -9,14 +9,16 @@ public class Inventory : MonoBehaviour
     public Bow bow;
     public Bomb bomb;
 
-    [NonSerialized] public bool hasKey = false;
+    //[NonSerialized] public bool hasKey = false;
+    [NonSerialized] public int keysCount = 0;
     [NonSerialized] public int arrowsCount = 3;
     [NonSerialized] public int bombsCount = 3;
 
 
     private void Start()
     {
-        items = new List<IUsable>() { key, bomb, bow };
+        //items = new List<IUsable>() { key, bomb, bow };
+        items = new List<IUsable>() { bomb, bow };
     }
 
     public void AddItem(ref int countToIncrease, IUsable itemToAdd)

@@ -99,8 +99,9 @@ public class PlayerMovement : MonoBehaviour
 
         Collider2D wallCollider = Physics2D.OverlapArea((Vector2)transform.position + boxCornerLeftUp,
                                                         (Vector2)transform.position + boxCornerRightDown,
-                                                        wallLayerMask | wallOnlyForPlayerLayerMask);
-                                                      //check all layers wall tiles can have in project
+                                                        wallLayerMask);
+                                                        //wallLayerMask | wallOnlyForPlayerLayerMask & ~ignoreRaycastLayerMask);
+        //check all layers wall tiles can have in project
         if (wallCollider != null)
         {
             if (wallCollider.TryGetComponent<WallTile>(out WallTile wallTile))

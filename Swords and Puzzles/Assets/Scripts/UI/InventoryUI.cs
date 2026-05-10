@@ -23,6 +23,9 @@ public class InventoryUI : MonoBehaviour
 
         itemsImages = new List<Image>() { arrow, bomb, key };
         itemPosition = new List<Vector2>() { pos1, pos2, pos3 };
+
+        // new
+        UpdateItems();
     }
 
     private void UpdateItems()
@@ -42,12 +45,12 @@ public class InventoryUI : MonoBehaviour
             itemsImages.Add(null);
         }
 
-        CheckGus(inventory.key, key);
-        CheckGus(inventory.bow, arrow);
-        CheckGus(inventory.bomb, bomb);
+        CheckIfContainsItem(inventory.key, key);
+        CheckIfContainsItem(inventory.bow, arrow);
+        CheckIfContainsItem(inventory.bomb, bomb);
     }
 
-    private void CheckGus(IUsable item, Image itemImage)
+    private void CheckIfContainsItem(IUsable item, Image itemImage)
     {
         if (inventory.items.Contains(item))
         {

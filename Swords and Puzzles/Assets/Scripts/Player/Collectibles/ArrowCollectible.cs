@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class ArrowCollectible : MonoBehaviour, IPickable
+public class ArrowCollectible : MonoBehaviour, IInteractable
 {
-    public void PickItem(Inventory inv)
+    public void Interact(Inventory inv)
     {
         inv.AddItem(ref inv.arrowsCount, inv.bow);
         Destroy(gameObject);
