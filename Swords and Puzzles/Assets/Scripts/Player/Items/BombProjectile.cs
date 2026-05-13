@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class BombProjectile : MonoBehaviour
 {
-    private float radius = 0.35f;
-    private float radiusMultiplier = 2.5f;
+    //private float radius = 0.35f;
+    //private float radiusMultiplier = 2.5f;
     private int playerLayerMask = 0;
 
     private int hitDamage = 5;
@@ -93,10 +93,24 @@ public class BombProjectile : MonoBehaviour
 
     private void BombExplosion()
     {
-        Collider2D ennemyCollider = Physics2D.OverlapCircle(transform.position, radius * radiusMultiplier, ~playerLayerMask);
-        if (ennemyCollider != null)
+        contactFilter.useLayerMask = true;
+        contactFilter.layerMask = ~playerLayerMask;
+
+        Collider2D[] hitColliders = new Collider2D[10];
+        Physics2D.OverlapCollider(circleCollider, contactFilter, hitColliders);
+
+        //Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius, ~playerLayerMask, -99f, 99f);
+        foreach (Collider2D collider in hitColliders)
         {
-            if (ennemyCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+            //
+            if (collider == null) continue;
+
+
+        //    Collider2D ennemyCollider = Physics2D.OverlapCircle(transform.position, radius * radiusMultiplier, ~playerLayerMask);
+        //if (ennemyCollider != null)
+        //{
+            //if (ennemyCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+            if (collider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
                 iDamageable.TakeDamage(hitDamage);
             }
         }

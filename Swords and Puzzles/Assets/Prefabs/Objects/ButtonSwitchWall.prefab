@@ -10,12 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4028938958700349287}
   - component: {fileID: 486116891127069973}
-  - component: {fileID: 6680016731318595869}
-  - component: {fileID: 6155618272113894169}
-  - component: {fileID: 1511913853227646850}
-  - component: {fileID: 3175921856526853918}
-  m_Layer: 0
-  m_Name: Door
+  - component: {fileID: 4879992430073160693}
+  m_Layer: 2
+  m_Name: ButtonSwitchWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4290951067794969034, guid: a11c8708237b97442b819906a71b23c6, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,53 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &6680016731318595869
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4064560228965611574}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 2, y: -0.53125}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4, y: 1.5625}
-    newSize: {x: 4, y: 1.5625}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 4, y: 0.5}
-  m_EdgeRadius: 0
---- !u!114 &6155618272113894169
+--- !u!114 &4879992430073160693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,30 +101,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4064560228965611574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 663db74142b9f9d45b2d33a34aef4a4d, type: 3}
+  m_Script: {fileID: 11500000, guid: ed6e024ae2d0be64582d74c9c467a828, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Door
---- !u!114 &1511913853227646850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4064560228965611574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50a3922fda428c7429a45fd24172d387, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WallTile
---- !u!114 &3175921856526853918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4064560228965611574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 837404d3a1e07c74b863dddf5c50d845, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WallForEveryone
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSwitchWall
+  wall: {fileID: 0}
