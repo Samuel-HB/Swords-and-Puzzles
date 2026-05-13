@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.LowLevelPhysics2D.PhysicsShape;
 
 public class PlayerMovement : MonoBehaviour
 {
     private Player player;
+
+    [SerializeField] private BoxCollider2D boxCollider;
+    //ContactFilter2D contactFilter = new ContactFilter2D();
 
     private Vector2 currentInputValue = new Vector3();
     private Vector3 movementDirection = new Vector3();
@@ -14,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 boxCornerLeftUp = new Vector2(-0.3125f, -0.125f);
     private Vector2 boxCornerRightDown = new Vector2(0.3125f, -0.625f);
     private int wallLayerMask = 0;
-    private int wallOnlyForPlayerLayerMask = 0;
+    //private int wallOnlyForPlayerLayerMask = 0;
 
 
     private void Start()
@@ -24,10 +28,17 @@ public class PlayerMovement : MonoBehaviour
         EventManager.swordAttacking += StopMovementTemporarly;
         EventManager.goingBackToIdle += RegainMovement;
 
+        EventManager.playerLoosing += OnMoveCanceled;
+        EventManager.pausingGame += OnMoveCanceled;
+
+        //
+        EventManager.enteringDialogue += OnMoveCanceled;
+
         player = GetComponent<Player>();
+        //boxCollider = GetComponent<BoxCollider2D>();
 
         wallLayerMask = 1 << LayerMask.NameToLayer("Default");
-        wallOnlyForPlayerLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
+        //wallOnlyForPlayerLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
     }
 
     public void OnMovePerformed(InputAction.CallbackContext context)
@@ -92,10 +103,40 @@ public class PlayerMovement : MonoBehaviour
         movementDirection = desiredMovementDirection;
     }
 
-
+    //bool delay = false;
     private void Update()
     {
         transform.position += movementDirection * speed * Time.deltaTime;
+
+        //contactFilter.useLayerMask = true;
+        //contactFilter.layerMask = wallLayerMask;
+
+        //Collider2D[] hitColliders = new Collider2D[10];
+        //Collider2D[] hitColliders = new Collider2D[1];
+        //Physics2D.OverlapCollider(boxCollider, contactFilter, hitColliders);
+
+        //foreach (Collider2D collider in hitColliders)
+        //{
+        //    print(collider);
+
+        //    if (collider == null) continue;
+
+        //    if (collider.TryGetComponent<WallTile>(out WallTile wallTile))
+        //    {
+        //        //Vector3 difference = transform.position - lastPosition;
+        //        //transform.position -= difference;
+        //        print("works");
+        //        delay = true;
+        //        break;
+        //    }
+        //}
+        //if (delay)
+        //{
+        //    Vector3 difference = transform.position - lastPosition;
+        //    transform.position -= difference;
+        //    delay = false;
+        //}
+
 
         Collider2D wallCollider = Physics2D.OverlapArea((Vector2)transform.position + boxCornerLeftUp,
                                                         (Vector2)transform.position + boxCornerRightDown,
@@ -117,5 +158,11 @@ public class PlayerMovement : MonoBehaviour
         EventManager.throwingBomb -= StopMovementTemporarly;
         EventManager.swordAttacking -= StopMovementTemporarly;
         EventManager.goingBackToIdle -= RegainMovement;
+
+        EventManager.playerLoosing -= OnMoveCanceled;
+        EventManager.pausingGame -= OnMoveCanceled;
+
+        //
+        EventManager.enteringDialogue -= OnMoveCanceled;
     }
 }

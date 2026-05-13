@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackOnPlayer : PlayerDetection
+public class TrackOnPlayer : EnemyDetection
 {
     public EnemyState state = new EnemyState();
     public Directions direction = new Directions();
@@ -11,7 +11,7 @@ public class TrackOnPlayer : PlayerDetection
     protected float moveSpeed = 3.5f;
     protected float initialMoveSpeed = 3.5f;
     private float moveSpeedMultiplier = 1.75f;
-    private float minDistanceToAttack = 1f;
+    private float minDistanceToAttack = 3f;
 
     [SerializeField] private List<Transform> patrolPoints = new List<Transform>();
     private int patrolPointIndex = 0;
@@ -33,7 +33,6 @@ public class TrackOnPlayer : PlayerDetection
     {
         if (TryToDetectPlayer())
         {
-            // new detection
             lastPatrolPoint = transform.position;
             targetPoint = transformDetected.position;
             state = EnemyState.Tracking;
@@ -42,12 +41,7 @@ public class TrackOnPlayer : PlayerDetection
 
     protected void Patrol()
     {
-        //targetPoint = patrolPoints[patrolPointIndex].position;
-        //targetPoint = patrolPoints[lastPatrolPoint].position;
-        // or patrolPointIndex.position
-
         targetPoint = patrolPoints[patrolPointIndex].position;
-
         transform.position = Vector2.MoveTowards(transform.position, targetPoint, moveSpeed * Time.deltaTime);
 
         // check why, the if is never reached with Vector3.Distance
@@ -63,10 +57,9 @@ public class TrackOnPlayer : PlayerDetection
     protected void TrackPlayer()
     {
         moveSpeed = initialMoveSpeed * moveSpeedMultiplier;
-
         transform.position = Vector2.MoveTowards(transform.position, targetPoint, moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, targetPoint) < minDistanceToAttack)
+        if (Vector3.Distance(transform.position, transformDetected.position) < minDistanceToAttack)
         {
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 1f, playerLayerMask);
             foreach (Collider2D collider in hitColliders)
@@ -75,8 +68,10 @@ public class TrackOnPlayer : PlayerDetection
                 {
                     state = EnemyState.Attack;
                     return;
-                }                
+                }
             }
+        }
+        else if (Vector3.Distance(transform.position, targetPoint) < 0.1f) {
             state = EnemyState.GoesBack;
         }
     }
@@ -91,33 +86,27 @@ public class TrackOnPlayer : PlayerDetection
         swordCollider.enabled = true;
         contactFilter.useLayerMask = true;
         contactFilter.layerMask = playerLayerMask;
-        //contactFilter.layerMask = playerDetectByRayacstLayerMask;
 
-        //Vector3 lookDirection = transform.position - transformDetected.position;
-
-        //lookDirection = transform.position - transformDetected.position;
-        //lookDirection = transform.position - targetPoint;
         lookDirection = targetPoint - transform.position;
 
         direction = GetDirectionInRangeOfFour(lookDirection, ref hideBackVision);
-        //GetSwordDirection();
         GetGameObjectDirection(sword);
 
         float time = 0;
-        //while (time < 0.5f)
         while (time < attackDuration)
         {
             time += Time.deltaTime;
 
-            Collider2D[] enemyColliders = new Collider2D[1] { null };
-            int collidersAmount = Physics2D.OverlapCollider(swordCollider, contactFilter, enemyColliders);
+            Collider2D[] hitColliders = new Collider2D[1] { null };
+            Physics2D.OverlapCollider(swordCollider, contactFilter, hitColliders);
 
-            if (enemyColliders[0] != null && enemyColliders[0].TryGetComponent<IDamageable>(out IDamageable iDamageable) &&
+            if (hitColliders[0] != null && hitColliders[0].TryGetComponent<IDamageable>(out IDamageable iDamageable) &&
                 canAttack)
             { 
                 iDamageable.TakeDamage(enemyDamage);
+                // just check
+                //EventManager.PlayerRemoveCollider();
                 EventManager.PlayerInvulnerability();
-                //contactFilter = ContactFilter2D.noFilter;
                 canAttack = false;
                 swordCollider.enabled = false;
             }
@@ -133,14 +122,11 @@ public class TrackOnPlayer : PlayerDetection
     protected void GoesBackToInitialPosition()
     {
         moveSpeed = initialMoveSpeed;
-
         targetPoint = lastPatrolPoint;
 
-        //transform.position = Vector2.MoveTowards(transform.position, patrolPoints[lastPatrolPoint].position,
         transform.position = Vector2.MoveTowards(transform.position, lastPatrolPoint,
                                                  moveSpeed * Time.deltaTime);
 
-        //if (Vector3.Distance(transform.position, patrolPoints[lastPatrolPoint].position) < 0.5f) {
         if (Vector3.Distance(transform.position, lastPatrolPoint) < 0.5f) {
             state = EnemyState.Patrol;
         }

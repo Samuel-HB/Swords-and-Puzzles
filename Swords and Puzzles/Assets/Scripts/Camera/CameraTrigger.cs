@@ -5,11 +5,12 @@ public class CameraTrigger : MonoBehaviour
 {
     private CameraManager cameraManager;
 
-    public Vector3 newCameraPosition;
-    public Vector3 newPlayerPosition;
+    [SerializeField] private Vector3 newCameraPosition;
+    [SerializeField] private Vector3 newPlayerPosition;
 
     private BoxCollider2D boxCollider;
 
+    //private ContactFilter2D contactFilter = new ContactFilter2D();
     ContactFilter2D contactFilter = new ContactFilter2D();
     private int playerLayerMask = 0;
 
@@ -33,12 +34,15 @@ public class CameraTrigger : MonoBehaviour
 
         if (colliders[0] != null )
         {
-            EventManager.PlayerInvulnerability();
+            EventManager.PlayerRemoveCollider();
 
             cameraManager.minPosition += newCameraPosition;
             cameraManager.maxPosition += newCameraPosition;
 
             colliders[0].transform.position += newPlayerPosition;
+
+            EventManager.SavePlayerPosition();
+
             Array.Clear(colliders, 0, colliders.Length); // is it good ?
 
             //cameraManager.CallUpdateCameraPositionTimer();

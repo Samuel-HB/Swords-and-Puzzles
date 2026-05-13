@@ -5,7 +5,7 @@ public class EnnemyBullet : MonoBehaviour
     private float radius = 0.5f;
     private int playerLayerMask = 0;
 
-    private int hitDamage = 2;
+    private int hitDamage = 1;
 
     private void Start()
     {
@@ -22,13 +22,20 @@ public class EnnemyBullet : MonoBehaviour
         CheckCollision();
     }
 
+
+    private bool canAttack = true;
     private void CheckCollision()
     {
         Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, radius, playerLayerMask);
         if (playerCollider != null)
         {
-            if (playerCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+            if (playerCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable) && canAttack)
+            {
                 iDamageable.TakeDamage(hitDamage);
+                // just check if should take damage
+                //EventManager.PlayerRemoveCollider();
+                EventManager.PlayerInvulnerability();
+                canAttack = false;
             }
             BulletDeactivation();
         }
@@ -42,6 +49,7 @@ public class EnnemyBullet : MonoBehaviour
                 }
             }
         }
+        canAttack = true;
     }
 
     private void BulletDeactivation()

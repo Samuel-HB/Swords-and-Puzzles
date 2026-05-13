@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class ShootOnPlayer : PlayerDetection
+public class ShootOnPlayer : EnemyDetection
 {
     private bool canShoot = true;
 
@@ -93,7 +93,6 @@ public class ShootOnPlayer : PlayerDetection
         if (bulletsGap <= 0) {
             bulletsGap = maxBulletsGap;
         }
-
-        InstantiatedKeeper.shotManager.StartShootOnPlayerTimer(bullet, bulletSpeed, shootDuration, direction);
+        Locator.shotManager.StartShootOnPlayerTimer(bullet, bulletSpeed, shootDuration, direction);
     }
 }

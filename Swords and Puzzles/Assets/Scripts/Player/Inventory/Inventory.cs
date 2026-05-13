@@ -15,7 +15,8 @@ public class Inventory : MonoBehaviour
     [NonSerialized] public int bombsCount = 3;
 
 
-    private void Start()
+    private void Awake()
+    //private void Start()
     {
         //items = new List<IUsable>() { key, bomb, bow };
         items = new List<IUsable>() { bomb, bow };

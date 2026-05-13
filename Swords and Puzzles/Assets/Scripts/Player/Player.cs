@@ -8,17 +8,43 @@ public class Player : MonoBehaviour, IDamageable
     [HideInInspector] public PlayerState state = new PlayerState();
 
     private IEnumerator timer;
-    public int health = 0;
+    [NonSerialized] public int health = 3;
+    [NonSerialized] public int maxHealth = 3;
 
     [NonSerialized] public float bowDuration = 0.5f;
     [NonSerialized] public float bombDuration = 0.25f;
     [NonSerialized] public float swordDuration = 0.4f;
     //[NonSerialized] public float swordDuration = 0.5f;
 
+    private BoxCollider2D boxCollider;
+    private SpriteRenderer spriteRenderer;
+
+    public bool isPlayerActivated = true;
+    public bool isInvulnerable = false;
+
+
+    private void Awake()
+    {
+        Locator.player = this;
+    }
+
+    private void Start()
+    {
+        EventManager.playerLoosing += DeactivatePlayer;
+        EventManager.restartingPlayer += ActivatePlayer;
+        EventManager.restartingPlayer += SetHealthAfterRestart;
+
+        boxCollider = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void TakeDamage(int damage)
     {
+        if (isInvulnerable) return;
+
         health -= damage;
+        EventManager.HitOnPlayer();
+
         if (health <= 0) {
             PlayerLose();
         }
@@ -26,7 +52,38 @@ public class Player : MonoBehaviour, IDamageable
 
     private void PlayerLose()
     {
-        print("player lose");
+        EventManager.PlayerLose();
+    }
+
+    private void DeactivatePlayer()
+    {
+        boxCollider.enabled = false;
+        spriteRenderer.enabled = false;
+
+        isPlayerActivated = false;
+    }
+
+    private void ActivatePlayer()
+    {
+        boxCollider.enabled = true;
+        spriteRenderer.enabled = true;
+
+        isPlayerActivated = true;
+    }
+
+    private void SetHealthAfterRestart()
+    {
+        health = 2;
+        EventManager.SetPlayerHealth();
+    }
+
+    public void AddHeart()
+    {
+        if (health < maxHealth)
+        {
+            health++;
+            EventManager.SetPlayerHealth();
+        }
     }
 
     public void CallStateTimer(PlayerState newState, float timeToWait)
@@ -50,5 +107,12 @@ public class Player : MonoBehaviour, IDamageable
             StopCoroutine(timer);
             timer = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.playerLoosing -= DeactivatePlayer;
+        EventManager.restartingPlayer -= ActivatePlayer;
+        EventManager.restartingPlayer -= SetHealthAfterRestart;
     }
 }

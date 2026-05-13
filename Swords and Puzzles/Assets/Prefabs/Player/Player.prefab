@@ -404,10 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   direction: 0
   state: 0
-  health: 0
-  bowDuration: 0.5
-  bombDuration: 0.25
-  swordDuration: 0.5
+  isPlayerActivated: 0
 --- !u!114 &7257173033330210899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -556,6 +553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   swordCollider: {fileID: 8117844788024773166}
+  sword: {fileID: 0}
 --- !u!114 &8966274669373035552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,6 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9c25926edde3a4b9c09eaadd1d6205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Key
+  radius: 1.5
 --- !u!114 &4537008583095501367
 MonoBehaviour:
   m_ObjectHideFlags: 0

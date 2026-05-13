@@ -6,7 +6,7 @@ public class ShotManager : MonoBehaviour
 
     private void Awake()
     {
-        InstantiatedKeeper.shotManager = this;
+        Locator.shotManager = this;
     }
 
     public void StartShootOnPlayerTimer(Transform bullet, float bulletSpeed, float shootDuration, Vector3 shotDirection)
