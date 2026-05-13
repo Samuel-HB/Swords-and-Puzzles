@@ -4,6 +4,8 @@ using UnityEngine;
 public class ButtonSwitchWall : MonoBehaviour
 {
     [SerializeField] private GameObject wall;
+    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite buttonPressedSprite;
 
     private IEnumerator timer;
     private float secondsToWait = 0.2f;
@@ -21,6 +23,8 @@ public class ButtonSwitchWall : MonoBehaviour
     {
         playerLayerMask = 1 << LayerMask.NameToLayer("Player");
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
         CallTimer();
     }
 
@@ -30,8 +34,10 @@ public class ButtonSwitchWall : MonoBehaviour
 
         if (hitCollider != null && hitCollider.TryGetComponent<Player>(out Player player))
         {
-            if (wall != null) {
+            if (wall != null)
+            {
                 Destroy(wall);
+                spriteRenderer.sprite = buttonPressedSprite;
             }
         }
     }
@@ -42,7 +48,7 @@ public class ButtonSwitchWall : MonoBehaviour
         StartCoroutine(timer);
     }
 
-    IEnumerator WaitToDetectTimer() // trying to optimize by doing the maths only 5 times a second
+    IEnumerator WaitToDetectTimer()
     {
         DetectPlayer();
         yield return new WaitForSeconds(secondsToWait);

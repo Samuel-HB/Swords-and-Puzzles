@@ -24,19 +24,8 @@ public class Key : MonoBehaviour, IUsable
         {
             if (collider != null && collider.TryGetComponent<Door>(out Door door))
             {
-                print("interact");
                 door.OpenDoor(inventory);
             }
         }
-        // avoid overlap with himself and sword collider
-        //Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius, ~playerLayerMask & ~ignoreRaycastLayerMask);
-        //if (hitCollider != null)
-        //{
-        //    print("try interact");
-        //    print(hitCollider);
-        //    if (hitCollider.TryGetComponent<IInteractable>(out IInteractable iInteractable)) {
-        //        iInteractable.Interact(inventory);
-        //    }
-        //}
     }
 }

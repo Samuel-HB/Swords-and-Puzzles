@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -53,17 +54,18 @@ public class PlayerAttack : MonoBehaviour
         contactFilter.useLayerMask = true;
         contactFilter.layerMask = ~playerLayerMask;
 
-        Collider2D[] enemyColliders = new Collider2D[5] { null, null, null, null, null };
-        int collidersAmount = Physics2D.OverlapCollider(swordCollider, contactFilter, enemyColliders);
+        Collider2D[] enemyColliders = new Collider2D[10];
+        Physics2D.OverlapCollider(swordCollider, contactFilter, enemyColliders);
 
-        for (int i = 0; i < collidersAmount; i++)
+        foreach (Collider2D collider in enemyColliders)
         {
-            if (enemyColliders[i].TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
+            if (collider == null) continue;
+
+            if (collider.TryGetComponent<IDamageable>(out IDamageable iDamageable)) {
                 iDamageable.TakeDamage(swordStrength);
             }
         }
         swordCollider.enabled = false;
-        //EventManager.BackToIdle();
     }
 
     public void ChoseSwordDirection()

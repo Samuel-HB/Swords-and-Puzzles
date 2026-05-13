@@ -14,7 +14,6 @@ public class PauseGameInputs : MonoBehaviour
 
     private void OnAttackActionPerformed(InputAction.CallbackContext context)
     {
-        //EventManager.PauseGame();
         EventManager.PressPauseGameButton();
     }
 

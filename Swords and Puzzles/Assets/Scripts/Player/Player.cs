@@ -14,7 +14,6 @@ public class Player : MonoBehaviour, IDamageable
     [NonSerialized] public float bowDuration = 0.5f;
     [NonSerialized] public float bombDuration = 0.25f;
     [NonSerialized] public float swordDuration = 0.4f;
-    //[NonSerialized] public float swordDuration = 0.5f;
 
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;

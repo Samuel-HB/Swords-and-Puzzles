@@ -11,17 +11,12 @@ public class DeactivateAllInputs : MonoBehaviour
 
     private void Start()
     {
-        //EventManager.pausingGame += DeactivateAllPlayerInputs;
-        //EventManager.resumingGame += ActivateAllPlayerInputs;
+
         EventManager.deactivatingPlayerInputs += DeactivateAllPlayerInputs;
         EventManager.activatingPlayerInputs += ActivateAllPlayerInputs;
 
         EventManager.playerLoosing += DeactivateAllPlayerInputs;
         EventManager.restartingPlayer += ActivateAllPlayerInputs;
-
-        //
-        //EventManager.enteringDialogue += DeactivateAllPlayerInputs;
-        //EventManager.exitingDialogue += ActivateAllPlayerInputs;
 
 
         playerMovementInputs = GetComponent<PlayerMovementInputs>();
@@ -50,16 +45,10 @@ public class DeactivateAllInputs : MonoBehaviour
 
     private void OnDestroy()
     {
-        //EventManager.pausingGame -= DeactivateAllPlayerInputs;
-        //EventManager.resumingGame -= ActivateAllPlayerInputs;
         EventManager.deactivatingPlayerInputs -= DeactivateAllPlayerInputs;
         EventManager.activatingPlayerInputs -= ActivateAllPlayerInputs;
 
         EventManager.playerLoosing -= DeactivateAllPlayerInputs;
         EventManager.restartingPlayer -= ActivateAllPlayerInputs;
-
-        //
-        //EventManager.enteringDialogue -= DeactivateAllPlayerInputs;
-        //EventManager.exitingDialogue -= ActivateAllPlayerInputs;
     }
 }

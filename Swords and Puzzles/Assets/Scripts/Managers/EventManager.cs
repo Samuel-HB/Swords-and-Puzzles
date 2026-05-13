@@ -128,12 +128,13 @@ public static class EventManager
         exitingDialogue?.Invoke();
     }
 
-    public static void ActivatePlayerInputs()
-    {
-        activatingPlayerInputs?.Invoke();
-    }
+
     public static void DeactivatePlayerInputs()
     {
         deactivatingPlayerInputs?.Invoke();
+    }
+    public static void ActivatePlayerInputs()
+    {
+        activatingPlayerInputs?.Invoke();
     }
 }

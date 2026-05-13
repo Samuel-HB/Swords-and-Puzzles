@@ -10,8 +10,7 @@ public class CameraTrigger : MonoBehaviour
 
     private BoxCollider2D boxCollider;
 
-    //private ContactFilter2D contactFilter = new ContactFilter2D();
-    ContactFilter2D contactFilter = new ContactFilter2D();
+    private ContactFilter2D contactFilter = new ContactFilter2D();
     private int playerLayerMask = 0;
 
 
@@ -43,9 +42,7 @@ public class CameraTrigger : MonoBehaviour
 
             EventManager.SavePlayerPosition();
 
-            Array.Clear(colliders, 0, colliders.Length); // is it good ?
-
-            //cameraManager.CallUpdateCameraPositionTimer();
+            Array.Clear(colliders, 0, colliders.Length);
         }
     }
 }

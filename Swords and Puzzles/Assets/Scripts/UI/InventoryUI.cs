@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    //[SerializeField] private Inventory inventory; // needs drag and drop
-    private Inventory inventory; // needs drag and drop
+    private Inventory inventory;
 
     private List<Image> itemsImages;
     [SerializeField] private Image arrow;
@@ -27,7 +26,6 @@ public class InventoryUI : MonoBehaviour
         itemsImages = new List<Image>() { arrow, bomb, key };
         itemPosition = new List<Vector2>() { pos1, pos2, pos3 };
 
-        // new
         UpdateItems();
     }
 

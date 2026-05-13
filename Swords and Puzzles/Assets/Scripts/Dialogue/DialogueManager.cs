@@ -8,12 +8,21 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI textComponent;
     [SerializeField] private GameObject dialogueContainer;
     public float letterWrightingDuration = 0.1f;
-    //public string[] lines;
     public List<string> lines;
     private int lineIndex;
 
 
-    //public void GiveLines(List<string> newLines)
+    private void Awake()
+    {
+        Locator.dialogueManager = this;
+    }
+
+    private void Start()
+    {
+        textComponent.text = string.Empty;
+        dialogueContainer.SetActive(false);
+    }
+
     public void GiveLines(string[] newLines)
     {
         EventManager.EnterDialogue();
@@ -24,18 +33,6 @@ public class DialogueManager : MonoBehaviour
             lines.Add(newline);
         }
         StartDialogue();
-    }
-
-    private void Awake()
-    {
-        Locator.dialogueManager = this;
-    }
-
-    private void Start()
-    {
-        textComponent.text = string.Empty;
-        //StartDialogue(); //
-        dialogueContainer.SetActive(false);
     }
 
     public void StartDialogue()
@@ -68,7 +65,6 @@ public class DialogueManager : MonoBehaviour
 
     private void NextLine()
     {
-        //if (lineIndex < lines.Length - 1)
         if (lineIndex < lines.Count - 1)
         {
             lineIndex++;
@@ -76,9 +72,7 @@ public class DialogueManager : MonoBehaviour
             StartCoroutine(TypeLine());
         }
         else {
-            //gameObject.SetActive(false);
             dialogueContainer.SetActive(false);
-
             EventManager.ExitDialogue();
         }
     }

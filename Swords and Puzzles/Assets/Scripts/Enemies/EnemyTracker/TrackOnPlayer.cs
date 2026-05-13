@@ -104,8 +104,6 @@ public class TrackOnPlayer : EnemyDetection
                 canAttack)
             { 
                 iDamageable.TakeDamage(enemyDamage);
-                // just check
-                //EventManager.PlayerRemoveCollider();
                 EventManager.PlayerInvulnerability();
                 canAttack = false;
                 swordCollider.enabled = false;
@@ -142,7 +140,6 @@ public class TrackOnPlayer : EnemyDetection
         direction = GetDirectionInRangeOfFour(lookDirection, ref hideBackVision);
         lookDirection = targetPoint - transform.position;
 
-        //yield return new WaitForSeconds(0.2f);
         yield return new WaitForSeconds(0.1f);
         CallCheckDirectionTimer();
     }

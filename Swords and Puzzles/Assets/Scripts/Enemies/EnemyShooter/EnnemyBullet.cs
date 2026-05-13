@@ -3,14 +3,10 @@ using UnityEngine;
 public class EnnemyBullet : MonoBehaviour
 {
     private float radius = 0.5f;
-    private int playerLayerMask = 0;
 
     private int hitDamage = 1;
+    private bool canAttack = true;
 
-    private void Start()
-    {
-        playerLayerMask = 1 << LayerMask.NameToLayer("Player");
-    }
 
     private void OnDrawGizmos()
     {
@@ -23,30 +19,21 @@ public class EnnemyBullet : MonoBehaviour
     }
 
 
-    private bool canAttack = true;
     private void CheckCollision()
     {
-        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, radius, playerLayerMask);
-        if (playerCollider != null)
+        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius);
+        if (hitCollider != null)
         {
-            if (playerCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable) && canAttack)
+            if (hitCollider.TryGetComponent<Player>(out Player player) && canAttack &&
+                hitCollider.TryGetComponent<IDamageable>(out IDamageable iDamageable) && canAttack)
             {
                 iDamageable.TakeDamage(hitDamage);
-                // just check if should take damage
-                //EventManager.PlayerRemoveCollider();
                 EventManager.PlayerInvulnerability();
                 canAttack = false;
+                BulletDeactivation();
             }
-            BulletDeactivation();
-        }
-        else
-        {
-            Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, radius);
-            if (hitCollider != null)
-            {
-                if (hitCollider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
-                    BulletDeactivation();
-                }
+            else if (hitCollider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone))  {
+                BulletDeactivation();
             }
         }
         canAttack = true;

@@ -143,6 +143,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ObjectTileSheet_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 115
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46d12944fc77d324fa7c97c0a8e2ef25
+      internalID: 433843706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ObjectTileSheet_3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 115
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 700f375b134415f46ac2d0333148105a
+      internalID: -1612205721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -161,6 +205,8 @@ TextureImporter:
     nameFileIdTable:
       ObjectTileSheet_0: 4290951067794969034
       ObjectTileSheet_1: -1769095944
+      ObjectTileSheet_2: 433843706
+      ObjectTileSheet_3: -1612205721
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
