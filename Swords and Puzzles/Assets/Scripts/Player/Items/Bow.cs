@@ -1,0 +1,97 @@
+using System.Collections;
+using UnityEngine;
+
+public class Bow : MonoBehaviour, IUsable
+{
+    private Player player;
+    private Inventory inventory;
+
+    private bool canShoot = true;
+
+    private Transform[] arrows = new Transform[15];
+    private int arrowIndex = 0;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private Transform arrowPrefab;
+
+    [SerializeField] private float arrowSpeed = 20;
+    private float shootDuration = 2f;
+
+
+    public void UseItem()
+    {
+        if (canShoot)
+        {
+            ActivateArrow(arrows[arrowIndex]);
+
+            arrowIndex = arrowIndex < arrows.Length - 1 ?
+                arrowIndex += 1 : arrowIndex = 0;
+
+            player.CallStateTimer(PlayerState.UsingItem, player.bowDuration);
+            inventory.RemoveItem(ref inventory.arrowsCount, inventory.bow);
+            EventManager.FireArrow();
+        }
+    }
+
+    private void Start()
+    {
+        player = GetComponent<Player>();
+        inventory = GetComponent<Inventory>();
+
+        for (int i = 0; i < arrows.Length; i++)
+        {
+            arrows[i] = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
+
+            arrows[i].GetComponent<SpriteRenderer>().enabled = false;
+            if (arrows[i].TryGetComponent<ArrowProjectile>(out ArrowProjectile arrow)) {
+                arrow.enabled = false;
+            }
+        }
+    }
+
+    private void ActivateArrow(Transform arrow)
+    {
+        arrow.position = shootPoint.position;
+
+        arrow.GetComponent<SpriteRenderer>().enabled = true;
+
+        if (arrow.TryGetComponent<ArrowProjectile>(out ArrowProjectile arrowProjectile)) {
+            arrowProjectile.enabled = true;
+        }
+        StartCoroutine(ShootTimer(arrow));
+    }
+
+    IEnumerator ShootTimer(Transform arrow)
+    {
+        Vector3 direction = new Vector3(0, 0);
+        direction = GetDirection(ref arrow);
+
+        float time = 0f;
+        while (time < shootDuration)
+        {
+            time += Time.deltaTime; ;
+            arrow.position += direction * arrowSpeed * Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private Vector2 GetDirection(ref Transform transform)
+    {
+        switch (player.direction)
+        {
+            case Directions.North:
+                transform.eulerAngles = new Vector3(0, 0, 90);
+                return new Vector3(0, 1);
+            case Directions.South:
+                transform.eulerAngles = new Vector3(0, 0, 270);
+                return new Vector3(0, -1);
+            case Directions.East:
+                transform.eulerAngles = new Vector3(0, 0, 0);
+                return new Vector3(1, 0);
+            case Directions.West:
+                transform.eulerAngles = new Vector3(0, 0, 180);
+                return new Vector3(-1, 0);
+            default:
+                return new Vector3(0, 1);
+        }
+    }
+}
