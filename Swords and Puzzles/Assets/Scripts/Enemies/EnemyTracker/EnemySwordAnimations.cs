@@ -14,7 +14,6 @@ public class EnemySwordAnimations : MonoBehaviour
 
     private void Start()
     {
-        //animator = GetComponentInParent<Animator>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         enemyTracker = GetComponentInParent<EnemyTracker>();
@@ -74,7 +73,7 @@ public class EnemySwordAnimations : MonoBehaviour
 
     IEnumerator AnimTimer()
     {
-        yield return new WaitForSeconds(enemyTracker.attackDuration); // maybe not the correct value
+        yield return new WaitForSeconds(enemyTracker.attackDuration);
         animator.Play(empty);
     }
 
