@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 public class Ennemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private GameObject[] items;
 
-    public int health = 0;
+    [NonSerialized] public int health = 1;
 
     public void TakeDamage(int damage)
     {
@@ -28,7 +29,7 @@ public class Ennemy : MonoBehaviour, IDamageable
             Instantiate(items[0], transform.position, Quaternion.identity);
         }
         else {
-            Instantiate(items[Random.Range(0, items.Length)], transform.position, Quaternion.identity);
+            Instantiate(items[UnityEngine.Random.Range(0, items.Length)], transform.position, Quaternion.identity);
         }
     }
 }

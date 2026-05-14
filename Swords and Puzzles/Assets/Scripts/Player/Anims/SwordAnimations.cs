@@ -14,35 +14,12 @@ public class SwordAnimations : MonoBehaviour
 
     private void Start()
     {
-        //animator = GetComponentInParent<Animator>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GetComponentInParent<Player>();
 
         EventManager.swordAttacking += ChoseSwordAttackDirection;
     }
-
-    //public void ChoseSwordAttackDirection()
-    //{
-    //    switch (player.direction)
-    //    {
-    //        case Directions.North:
-    //            ChangeAnimState(180, false);
-    //            break;
-    //        case Directions.South:
-    //            ChangeAnimState(0, false);
-    //            break;
-    //        case Directions.East:
-    //            ChangeAnimState(90, false);
-    //            break;
-    //        case Directions.West:
-    //            ChangeAnimState(270, true);
-    //            break;
-    //        default:
-    //            ChangeAnimState(180, false);
-    //            break;
-    //    }
-    //}
 
     public void ChoseSwordAttackDirection()
     {
@@ -63,7 +40,6 @@ public class SwordAnimations : MonoBehaviour
     private void ChangeAnimState(bool isFlipX)
     {
         spriteRenderer.flipX = isFlipX;
-        //transform.eulerAngles = new Vector3(0, 0, zRotation);
 
         animator.Play(swordAttack);
         CallAnimTimer();

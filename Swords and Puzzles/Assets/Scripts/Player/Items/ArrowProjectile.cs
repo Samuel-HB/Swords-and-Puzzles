@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ArrowProjectile : MonoBehaviour
 {
-    private float radius = 0.5f;
     private int playerLayerMask = 0;
-    private BoxCollider2D boxCollider;
+    [SerializeField] private BoxCollider2D colliderForEnemy;
+    [SerializeField] private BoxCollider2D colliderForWall;
     ContactFilter2D contactFilter = new ContactFilter2D();
 
     private int hitDamage = 2;
@@ -12,13 +12,6 @@ public class ArrowProjectile : MonoBehaviour
     private void Start()
     {
         playerLayerMask = 1 << LayerMask.NameToLayer("Player");
-
-        boxCollider = GetComponent<BoxCollider2D>();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, radius);
     }
 
     private void Update()
@@ -32,8 +25,9 @@ public class ArrowProjectile : MonoBehaviour
         contactFilter.layerMask = ~playerLayerMask;
 
         Collider2D[] hitColliders = new Collider2D[10];
-        Physics2D.OverlapCollider(boxCollider, contactFilter, hitColliders);
+        Physics2D.OverlapCollider(colliderForEnemy, contactFilter, hitColliders);
 
+        // bigger collider for enemies
         foreach (Collider2D collider in hitColliders)
         {
             if (collider == null) continue;
@@ -43,7 +37,16 @@ public class ArrowProjectile : MonoBehaviour
                 iDamageable.TakeDamage(hitDamage);
                 ArrowDeactivation();
             }
-            else if (collider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
+        }
+        // smaller collider for wall, to avoid to collide on them as soon as launched if player near wall
+        hitColliders = new Collider2D[10];
+        Physics2D.OverlapCollider(colliderForWall, contactFilter, hitColliders);
+
+        foreach (Collider2D collider in hitColliders)
+        {
+            if (collider == null) continue;
+
+            if (collider.TryGetComponent<WallForEveryone>(out WallForEveryone wallForEveryone)) {
                 ArrowDeactivation();
             }
         }
